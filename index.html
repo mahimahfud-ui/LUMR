@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Moments</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+html,body{height:100%}
+body{font-family:'Inter',-apple-system,BlinkMacSystemFont,sans-serif;background:#f0f2f5;display:flex;justify-content:center;align-items:center}
+button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
+input{font:inherit}
+.app{width:100%;max-width:420px;height:100dvh;background:#fff;display:flex;flex-direction:column;position:relative;overflow:hidden;padding-top:env(safe-area-inset-top,0px)}
+@media(min-width:480px){.app{height:min(780px,94dvh);border-radius:36px;box-shadow:0 25px 50px -12px rgba(0,0,0,.15)}}
+.header{padding:16px 20px;display:flex;align-items:center;justify-content:space-between;min-height:60px}
+.header h1{font-size:20px;font-weight:700;color:#111}
+.menu{width:24px;height:24px;display:flex;flex-direction:column;justify-content:center;gap:5px}
+.menu span{display:block;height:2px;background:#111;border-radius:2px;width:18px}
+.menu span:nth-child(2){width:14px}
+.ph{width:24px}
+.tabs{display:flex;gap:20px;padding:0 20px 16px;overflow-x:auto;scrollbar-width:none;flex:none}
+.tabs::-webkit-scrollbar,.grid::-webkit-scrollbar{display:none}
+.tab{font-size:14px;font-weight:500;color:#9ca3af;white-space:nowrap;position:relative;padding-bottom:6px}
+.tab.active{color:#111;font-weight:600}
+.tab.active::after{content:'';position:absolute;bottom:0;left:0;right:0;height:2px;background:#111;border-radius:2px}
+.grid{flex:1;padding:0 12px 12px;display:grid;grid-template-columns:1fr 1fr;gap:10px;overflow-y:auto;scrollbar-width:none;align-content:start}
+.gi{aspect-ratio:1;border-radius:16px;overflow:hidden;background:#e5e7eb;position:relative;display:block;width:100%}
+.gi img,.gi video{width:100%;height:100%;object-fit:cover;display:block}
+.vb{position:absolute;top:8px;right:8px;width:26px;height:26px;border-radius:50%;background:rgba(0,0,0,.5);color:#fff;display:grid;place-items:center}
+.vb svg{width:12px;height:12px}
+.empty{grid-column:1/-1;text-align:center;padding:70px 20px;color:#9ca3af;font-size:14px}
+.empty b{display:block;color:#111;font-size:17px;margin-bottom:6px}
+.bottom-nav{height:70px;flex:none;display:flex;justify-content:space-around;align-items:center;padding:0 10px 10px;background:#fff;border-top:1px solid #f3f4f6;margin-bottom:env(safe-area-inset-bottom,0px)}
+.nav-item{width:44px;height:44px;display:flex;align-items:center;justify-content:center;border-radius:50%;color:#9ca3af}
+.nav-item.active{color:#111}
+.nav-item svg{width:24px;height:24px}
+.fab{width:52px;height:52px;background:#111;border-radius:50%;display:flex;align-items:center;justify-content:center;color:#fff;box-shadow:0 8px 20px rgba(0,0,0,.2);margin-top:-20px}
+.fab svg{width:24px;height:24px}
+.profile-header{padding:16px 20px 20px;text-align:center;flex:none}
+.avatar{width:88px;height:88px;border-radius:50%;overflow:hidden;margin:0 auto 14px;border:3px solid #fff;box-shadow:0 4px 12px rgba(0,0,0,.1);background:#e5e7eb center/cover;display:grid;place-items:center;font-size:32px;font-weight:700;color:#9ca3af}
+.pname{font-size:20px;font-weight:700;color:#111;margin-bottom:4px}
+.ploc{font-size:13px;color:#6b7280;margin-bottom:18px;min-height:19px}
+.stats{display:flex;justify-content:center;gap:32px}
+.stat-value{font-size:17px;font-weight:700;color:#111}
+.stat-label{font-size:12px;color:#9ca3af;margin-top:2px}
+.edit{margin-top:16px;font-size:13px;font-weight:600;border:1px solid #e5e7eb;border-radius:99px;padding:7px 18px}
+.sheet-bg{position:absolute;inset:0;background:rgba(0,0,0,.4);display:none;align-items:flex-end;z-index:20}
+.sheet-bg.on{display:flex}
+.sheet{background:#fff;width:100%;border-radius:28px 28px 0 0;padding:24px 20px calc(24px + env(safe-area-inset-bottom,0px));display:flex;flex-direction:column;gap:12px}
+.sheet h2{font-size:18px}
+.sheet input[type=text]{border:1px solid #e5e7eb;border-radius:12px;padding:12px 14px;width:100%}
+.btn{background:#111;color:#fff;border-radius:12px;padding:13px;font-weight:600}
+.btn.ghost{background:#f3f4f6;color:#111}
+#viewer{position:absolute;inset:0;background:#000;z-index:30;display:none;flex-direction:column}
+#viewer.on{display:flex}
+#viewer .bar{display:flex;justify-content:space-between;padding:16px 20px;color:#fff;padding-top:calc(16px + env(safe-area-inset-top,0px))}
+#viewer .bar svg{width:24px;height:24px}
+#stage{flex:1;min-height:0;display:grid;place-items:center}
+#stage img,#stage video{max-width:100%;max-height:100%;object-fit:contain}
+#prog{position:absolute;top:0;left:0;height:3px;background:#111;width:0;z-index:40;transition:width .2s}
+:focus-visible{outline:2px solid #111;outline-offset:2px}
+</style>
+</head>
+<body>
+<div class="app" id="app">
+  <div id="prog"></div>
+  <div id="top"></div>
+  <div id="content" style="display:flex;flex-direction:column;flex:1;min-height:0"></div>
+  <div class="bottom-nav" id="nav"></div>
+
+  <div class="sheet-bg" id="newCol"><div class="sheet">
+    <h2>New collection</h2>
+    <input type="text" id="colName" placeholder="e.g. Travel" maxlength="24">
+    <button class="btn" id="colOk">Create</button><button class="btn ghost" data-close>Cancel</button>
+  </div></div>
+
+  <div class="sheet-bg" id="editP"><div class="sheet">
+    <h2>Edit profile</h2>
+    <label class="btn ghost" style="text-align:center;cursor:pointer">Change photo<input type="file" id="avIn" accept="image/*" hidden></label>
+    <input type="text" id="pName" placeholder="Name" maxlength="40">
+    <input type="text" id="pLoc" placeholder="Location" maxlength="40">
+    <button class="btn" id="pOk">Save</button><button class="btn ghost" data-close>Cancel</button>
+  </div></div>
+
+  <div id="viewer"><div class="bar">
+    <button id="vClose" aria-label="Close"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 6L6 18M6 6l12 12"/></svg></button>
+    <span><button id="vFav" aria-label="Save" style="margin-right:20px"><svg id="favSvg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"/></svg></button>
+    <button id="vDel" aria-label="Delete"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 6h18M8 6V4h8v2M6 6l1 14h10l1-14"/></svg></button></span>
+  </div><div id="stage"></div></div>
+</div>
+<input type="file" id="fileIn" accept="image/*,video/*" multiple hidden>
+
+<script>
+const $=id=>document.getElementById(id);
+const IC={
+ home:'<path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/>',
+ video:'<rect x="3" y="5" width="18" height="14" rx="3"/><path d="M10 9.5v5l4-2.5z"/>',
+ mark:'<path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"/>',
+ user:'<path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/>'};
+const svg=(k,on)=>`<svg viewBox="0 0 24 24" fill="${on?'currentColor':'none'}" stroke="currentColor" stroke-width="2">${IC[k]}</svg>`;
+
+// ---------- Storage (originals saved as-is = full quality) ----------
+let db;
+const open=()=>new Promise((ok,no)=>{const r=indexedDB.open('moments-db',1);
+ r.onupgradeneeded=()=>{r.result.createObjectStore('media',{keyPath:'id'});r.result.createObjectStore('meta')};
+ r.onsuccess=()=>{db=r.result;ok()};r.onerror=()=>no(r.error)});
+const st=(s,m='readonly')=>db.transaction(s,m).objectStore(s);
+const pr=r=>new Promise((ok,no)=>{r.onsuccess=()=>ok(r.result);r.onerror=()=>no(r.error)});
+const meta=k=>pr(st('meta').get(k));
+const setMeta=(k,v)=>pr(st('meta','readwrite').put(v,k));
+
+let items=[],cols=[],prof={name:'Your Name',loc:'',avatar:null},screen='home',tab='all',cur=null,urls=[];
+
+async function init(){
+ try{await open()}catch(e){$('content').innerHTML='<div class="empty"><b>Storage blocked</b>Open this file in a normal browser window.</div>';return}
+ cols=(await meta('cols'))||[];
+ prof={...prof,...((await meta('prof'))||{})};
+ try{navigator.storage?.persist?.()}catch(e){}
+ await load();
+}
+async function load(){items=(await pr(st('media').getAll())).sort((a,b)=>b.added-a.added);render()}
+
+function render(){
+ urls.forEach(URL.revokeObjectURL);urls=[];
+ const titles={home:'Moments',videos:'Videos',saved:'Saved'};
+ let list=items;
+ if(screen==='videos')list=items.filter(i=>i.type==='video');
+ if(screen==='saved')list=items.filter(i=>i.fav);
+ if(screen==='home'&&tab!=='all')list=items.filter(i=>i.col===tab);
+
+ $('top').innerHTML=screen==='profile'?'':
+  `<div class="header"><div class="menu"><span></span><span></span><span></span></div><h1>${titles[screen]}</h1><div class="ph"></div></div>`;
+
+ let h='';
+ if(screen==='home'){
+  h+=`<div class="tabs"><button class="tab ${tab==='all'?'active':''}" data-tab="all">All</button>`+
+   cols.map(c=>`<button class="tab ${tab===c?'active':''}" data-tab="${esc(c)}">${esc(c)}</button>`).join('')+
+   `<button class="tab" id="addCol">+ New</button></div>`;
+ }
+ if(screen==='profile'){
+  const ph=items.filter(i=>i.type==='image').length;
+  let av='';
+  if(prof.avatar){const u=URL.createObjectURL(prof.avatar);urls.push(u);av=`style="background-image:url(${u})"`}
+  h+=`<div class="profile-header"><div class="avatar" ${av}>${prof.avatar?'':esc((prof.name[0]||'?').toUpperCase())}</div>
+   <div class="pname">${esc(prof.name)}</div><div class="ploc">${esc(prof.loc)}</div>
+   <div class="stats"><div class="stat"><div class="stat-value">${items.length}</div><div class="stat-label">Posts</div></div>
+   <div class="stat"><div class="stat-value">${ph}</div><div class="stat-label">Photos</div></div>
+   <div class="stat"><div class="stat-value">${items.length-ph}</div><div class="stat-label">Videos</div></div></div>
+   <button class="edit" id="editBtn">Edit profile</button></div>`;
+  list=items;
+ }
+ h+='<div class="grid" id="grid"></div>';
+ $('content').innerHTML=h;
+
+ const g=$('grid');
+ if(!list.length)g.innerHTML=`<div class="empty"><b>Nothing here yet</b>${screen==='saved'?'Tap the bookmark in any photo to save it.':'Tap + to add photos and videos.'}</div>`;
+ list.forEach(it=>{
+  const u=URL.createObjectURL(it.blob);urls.push(u);
+  const b=document.createElement('button');b.className='gi';
+  b.innerHTML=(it.type==='video'?`<video src="${u}#t=0.1" preload="metadata" muted playsinline></video><span class="vb"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M6 4l14 8-14 8z"/></svg></span>`:`<img src="${u}" loading="lazy" alt="">`);
+  b.onclick=()=>view(it,u);g.appendChild(b);
+ });
+
+ $('nav').innerHTML=
+  [['home','home'],['videos','video']].map(([s,i])=>`<button class="nav-item ${screen===s?'active':''}" data-s="${s}" aria-label="${s}">${svg(i,screen===s)}</button>`).join('')+
+  `<button class="fab" id="fab" aria-label="Upload"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg></button>`+
+  [['saved','mark'],['profile','user']].map(([s,i])=>`<button class="nav-item ${screen===s?'active':''}" data-s="${s}" aria-label="${s}">${svg(i,screen===s)}</button>`).join('');
+}
+const esc=s=>String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+
+// ---------- Events ----------
+document.addEventListener('click',e=>{
+ const t=e.target.closest('[data-tab],[data-s],#addCol,#fab,#editBtn,[data-close]');
+ if(!t)return;
+ if(t.dataset.tab!==undefined){tab=t.dataset.tab;render()}
+ else if(t.dataset.s){screen=t.dataset.s;render()}
+ else if(t.id==='addCol'){$('colName').value='';$('newCol').classList.add('on');$('colName').focus()}
+ else if(t.id==='fab')$('fileIn').click();
+ else if(t.id==='editBtn'){$('pName').value=prof.name;$('pLoc').value=prof.loc;$('editP').classList.add('on')}
+ else if(t.hasAttribute('data-close'))document.querySelectorAll('.sheet-bg').forEach(s=>s.classList.remove('on'));
+});
+$('colOk').onclick=async()=>{
+ const n=$('colName').value.trim();
+ if(n&&!cols.includes(n)){cols.push(n);await setMeta('cols',cols);tab=n;screen='home'}
+ $('newCol').classList.remove('on');render();
+};
+$('pOk').onclick=async()=>{
+ prof.name=$('pName').value.trim()||'Your Name';prof.loc=$('pLoc').value.trim();
+ await setMeta('prof',prof);$('editP').classList.remove('on');render();
+};
+$('avIn').onchange=async e=>{const f=e.target.files[0];if(!f)return;prof.avatar=f;await setMeta('prof',prof);render()};
+
+$('fileIn').onchange=async e=>{
+ const files=[...e.target.files].filter(f=>/^(image|video)\//.test(f.type));e.target.value='';
+ for(let i=0;i<files.length;i++){
+  const f=files[i];
+  try{await pr(st('media','readwrite').put({id:crypto.randomUUID(),type:f.type.startsWith('video')?'video':'image',blob:f,added:Date.now()+i,fav:false,col:screen==='home'&&tab!=='all'?tab:null}))}
+  catch(err){alert('Could not save '+f.name+'. Storage may be full.')}
+  $('prog').style.width=((i+1)/files.length*100)+'%';
+ }
+ setTimeout(()=>$('prog').style.width='0',400);load();
+};
+
+// ---------- Viewer ----------
+function view(it,u){
+ cur=it;
+ $('stage').innerHTML=it.type==='video'?`<video src="${u}" controls autoplay playsinline></video>`:`<img src="${u}" alt="">`;
+ $('favSvg').setAttribute('fill',it.fav?'currentColor':'none');
+ $('viewer').classList.add('on');
+}
+const closeV=()=>{$('stage').innerHTML='';$('viewer').classList.remove('on');cur=null};
+$('vClose').onclick=closeV;
+document.addEventListener('keydown',e=>{if(e.key==='Escape')closeV()});
+$('vFav').onclick=async()=>{cur.fav=!cur.fav;await pr(st('media','readwrite').put(cur));$('favSvg').setAttribute('fill',cur.fav?'currentColor':'none')};
+$('vDel').onclick=async()=>{
+ if(!confirm('Delete this permanently?'))return;
+ await pr(st('media','readwrite').delete(cur.id));closeV();load();
+};
+init();
+</script>
+</body>
+</html>
