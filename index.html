@@ -6,219 +6,118 @@
 <title>LUMR — Visual Journal</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600&family=Playfair+Display:wght@400;500&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
 <style>
-*{box-sizing:border-box;margin:0;padding:0}
-:root{--bg:#f6f5f1;--card:#eeece6;--text:#161614;--muted:#85837b;--line:#dedcd4;--overlay:rgba(246,245,241,.88)}
-[data-theme=dark]{--bg:#0e0e0d;--card:#191917;--text:#f2f1ec;--muted:#98968e;--line:#30302c;--overlay:rgba(14,14,13,.88)}
-html{background:var(--bg);scroll-behavior:smooth}
-body{background:var(--bg);color:var(--text);font-family:"DM Sans",sans-serif;min-height:100vh}
-button,input{font:inherit;color:inherit}button{border:0;background:none;cursor:pointer}
-.app{max-width:1800px;margin:auto;min-height:100vh}
-.header{height:78px;padding:0 42px;display:grid;grid-template-columns:1fr auto 1fr;align-items:center;position:sticky;top:0;z-index:20;background:var(--overlay);backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px);border-bottom:1px solid transparent}
-.brand{font-family:"Playfair Display",serif;font-size:21px;letter-spacing:.14em;text-transform:uppercase}
-.header-right{justify-self:end;display:flex;align-items:center;gap:10px}
-.icon-btn{width:38px;height:38px;border:1px solid var(--line);border-radius:50%;display:grid;place-items:center;transition:.2s}
-.icon-btn:hover{background:var(--text);color:var(--bg)}
-.icon-btn svg{width:17px;height:17px}
-.hero{padding:58px 42px 28px;display:flex;justify-content:space-between;align-items:end;gap:30px}
-.hero-title{font-family:"Playfair Display",serif;font-size:clamp(42px,6vw,82px);font-weight:400;line-height:.94;letter-spacing:-.045em}
-.hero-copy{max-width:330px;color:var(--muted);font-size:12px;line-height:1.7;text-align:right}
-.filters{display:flex;align-items:center;gap:25px;padding:20px 42px 17px;border-bottom:1px solid var(--line);overflow:auto;scrollbar-width:none}
-.filters::-webkit-scrollbar{display:none}
-.filter{font-size:10px;letter-spacing:.15em;text-transform:uppercase;color:var(--muted);white-space:nowrap;padding-bottom:7px;position:relative}
-.filter.active{color:var(--text)}
-.filter.active:after{content:"";position:absolute;left:0;right:0;bottom:0;height:1px;background:var(--text)}
-.gallery{padding:28px 28px 125px;columns:5 220px;column-gap:12px}
-.item{width:100%;break-inside:avoid;margin:0 0 12px;display:block;position:relative;overflow:hidden;background:var(--card);padding:0;animation:rise .5s both}
-@keyframes rise{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:none}}
-.item img,.item video{display:block;width:100%;height:auto;object-fit:cover}
-.item img{transition:transform .65s cubic-bezier(.2,.7,.2,1)}
-.item:hover img{transform:scale(1.025)}
-.item-overlay{position:absolute;inset:0;display:flex;align-items:flex-end;justify-content:space-between;padding:14px;opacity:0;background:linear-gradient(transparent,rgba(0,0,0,.45));transition:.25s;pointer-events:none}
-.item:hover .item-overlay{opacity:1}
-.item-name{color:#fff;font-size:10px;letter-spacing:.08em;text-transform:uppercase}
-.save-mini{pointer-events:auto;color:#fff;width:30px;height:30px;border-radius:50%;display:grid;place-items:center;background:rgba(0,0,0,.3);backdrop-filter:blur(8px)}
-.save-mini svg{width:15px}
-.play{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);width:48px;height:48px;border:1px solid rgba(255,255,255,.75);border-radius:50%;display:grid;place-items:center;color:#fff;background:rgba(0,0,0,.18);backdrop-filter:blur(8px);pointer-events:none}
-.play svg{width:17px;margin-left:2px}
-.badge{position:absolute;top:10px;right:10px;font-size:8px;letter-spacing:.12em;color:#fff;padding:6px 8px;background:rgba(0,0,0,.38);backdrop-filter:blur(8px)}
-.empty{column-span:all;text-align:center;padding:110px 20px;color:var(--muted)}
-.empty-title{font-family:"Playfair Display",serif;color:var(--text);font-size:32px;margin-bottom:9px}
-.empty p{font-size:12px}
-.bottom{position:fixed;z-index:30;left:50%;bottom:20px;transform:translateX(-50%);height:56px;padding:0 10px;border:1px solid var(--line);border-radius:99px;background:var(--overlay);backdrop-filter:blur(20px);display:flex;align-items:center;gap:3px;box-shadow:0 12px 40px rgba(0,0,0,.08)}
-.nav{width:45px;height:45px;border-radius:50%;display:grid;place-items:center;color:var(--muted)}
-.nav.active{color:var(--text);background:var(--card)}
-.nav svg{width:18px;height:18px}
-.upload{width:45px;height:45px;border-radius:50%;background:var(--text);color:var(--bg);display:grid;place-items:center;margin:0 5px}
-.upload svg{width:18px}
-.sheet-bg{position:fixed;inset:0;background:rgba(0,0,0,.48);display:none;align-items:flex-end;z-index:70}
-.sheet-bg.on{display:flex}
-.sheet{width:min(520px,100%);margin:auto;background:var(--bg);border-radius:25px 25px 0 0;padding:28px 22px calc(25px + env(safe-area-inset-bottom));display:grid;gap:10px}
-.sheet h2{font:400 26px "Playfair Display",serif;margin-bottom:5px}
-.sheet input{width:100%;border:1px solid var(--line);border-radius:12px;background:transparent;padding:12px 13px;outline:none}
-.btn{padding:13px;border-radius:12px;background:var(--text);color:var(--bg);font-weight:600}
-.btn.ghost{background:transparent;color:var(--muted)}
-.profile{padding:70px 25px 25px;text-align:center}
-.avatar{width:104px;height:104px;margin:0 auto 18px;border-radius:50%;background:var(--card) center/cover;display:grid;place-items:center;font:400 35px "Playfair Display",serif}
-.profile h2{font:400 34px "Playfair Display",serif}
-.profile p{font-size:12px;color:var(--muted);margin:7px 0 23px}
-.stats{display:flex;justify-content:center;gap:38px}.stat b{font:400 20px "Playfair Display",serif;display:block}.stat span{font-size:8px;letter-spacing:.15em;text-transform:uppercase;color:var(--muted)}
-.edit{margin-top:22px;border:1px solid var(--line);border-radius:99px;padding:9px 18px;font-size:10px;letter-spacing:.08em;text-transform:uppercase}
-#viewer{position:fixed;inset:0;background:#090909;color:#fff;z-index:100;display:none;flex-direction:column}
-#viewer.on{display:flex}
-.viewer-bar{height:72px;display:flex;align-items:center;justify-content:space-between;padding:0 24px}
-.viewer-bar button{color:#fff}
-.viewer-bar svg{width:20px;height:20px}
-.viewer-title{font-size:10px;letter-spacing:.12em;text-transform:uppercase;opacity:.7}
-.stage{flex:1;min-height:0;display:grid;place-items:center;padding:10px 28px 35px}
-.stage img,.stage video{max-width:100%;max-height:100%;object-fit:contain}
-.toast{position:fixed;left:50%;bottom:92px;transform:translate(-50%,10px);background:var(--text);color:var(--bg);padding:9px 13px;border-radius:99px;font-size:10px;opacity:0;pointer-events:none;transition:.25s;z-index:120}
-.toast.on{opacity:1;transform:translate(-50%,0)}
-#prog{position:fixed;top:0;left:0;height:2px;background:var(--text);width:0;z-index:200;transition:width .2s}
-@media(max-width:1200px){.gallery{columns:4 220px}}
-@media(max-width:900px){.gallery{columns:3 210px}}
-@media(max-width:600px){
-.header{height:62px;padding:0 16px}.brand{font-size:17px}.header-right .icon-btn:first-child{display:none}
-.hero{padding:42px 18px 24px;display:block}.hero-title{font-size:54px}.hero-copy{text-align:left;margin-top:17px;max-width:290px}
-.filters{padding:17px 18px 14px;gap:20px}.gallery{columns:2 140px;padding:12px 8px 105px;column-gap:7px}.item{margin-bottom:7px}
-.item-overlay{opacity:1;padding:8px;background:linear-gradient(transparent,rgba(0,0,0,.35))}.save-mini{width:27px;height:27px}
-.play{width:40px;height:40px}.bottom{bottom:12px}.profile{padding-top:45px}
-}
+*{margin:0;padding:0;box-sizing:border-box}
+:root{--bg:#000;--surface:#111;--surface2:#181818;--text:#fff;--muted:#777;--line:#222;--gold:#ffcc66}
+[data-theme=light]{--bg:#f7f7f5;--surface:#fff;--surface2:#eee;--text:#111;--muted:#777;--line:#ddd}
+html,body{width:100%;height:100%;background:#121212;color:var(--text);font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif}
+button{font:inherit;color:inherit;cursor:pointer}
+.app-container{width:100%;max-width:430px;height:100dvh;margin:auto;background:var(--bg);display:flex;flex-direction:column;position:relative;overflow:hidden;box-shadow:0 0 60px rgba(0,0,0,.35)}
+.screen{flex:1;display:none;flex-direction:column;overflow-y:auto;min-height:0}.screen.active{display:flex}
+.top-bar{display:flex;justify-content:space-between;align-items:center;padding:15px 20px;min-height:58px;flex-shrink:0}
+.menu-btn,.search-btn,.camera-btn,.close-btn{background:none;border:0;color:var(--text);font-size:20px}
+.screen-title{font-size:24px;font-weight:700}.pro-btn,.upgrade-btn{background:var(--gold);color:#000;border:0;padding:7px 12px;border-radius:20px;font-size:10px;font-weight:800}
+.sub-nav{display:flex;gap:25px;padding:0 20px 15px;border-bottom:1px solid var(--line);flex-shrink:0}.tab{font-size:15px;color:var(--muted);cursor:pointer;font-weight:500}.tab.active{color:var(--text);position:relative}.tab.active:after{content:"";position:absolute;left:0;right:0;bottom:-16px;height:2px;background:var(--text)}
+.content{flex:1;padding:15px;overflow:auto}.feed-card{background:var(--surface2);border-radius:8px;overflow:hidden;margin-bottom:20px}.image-container img{width:100%;display:block;aspect-ratio:4/5;object-fit:cover}.card-footer{display:flex;justify-content:space-between;align-items:center;padding:12px 15px}.user-info{display:flex;align-items:center;gap:10px}.avatar,.profile-avatar{border-radius:50%;object-fit:cover}.avatar{width:32px;height:32px}.username{font-size:14px;font-weight:600}.actions{display:flex;align-items:center;gap:14px;font-size:15px;color:#ccc}.badge{background:#6a32d8;color:#fff;font-size:9px;padding:3px 6px;border-radius:6px;font-weight:bold}
+.menu-top{justify-content:space-between}.menu-content{padding:10px 20px 90px;overflow:auto}.menu-section-title{font-size:10px;color:var(--muted);letter-spacing:1.4px;margin:25px 0 10px}.menu-list{list-style:none}.menu-list li{padding:13px 0;font-size:17px;border-bottom:1px solid var(--line);color:var(--text)}.menu-item-flex{display:flex;justify-content:space-between;align-items:center}.new-tag{background:#e2e8f0;color:#000;font-size:9px;padding:3px 6px;border-radius:4px;font-weight:800}.menu-desc{color:var(--muted);font-size:12px;display:block;margin-top:4px}
+.username-top{font-weight:600;font-size:16px}.top-icons{display:flex;gap:20px;font-size:18px}.profile-header{display:flex;justify-content:space-between;padding:20px}.profile-name{font-size:28px;margin-bottom:8px}.profile-bio{font-size:13px;color:#aaa;max-width:255px}.profile-avatar{width:70px;height:70px}.profile-buttons{display:flex;gap:10px;padding:0 20px 20px}.btn-primary,.btn-secondary{flex:1;padding:10px;border-radius:20px;font-weight:700;font-size:11px;border:1px solid #444;background:#fff;color:#000}.btn-secondary{background:transparent;color:var(--text)}.profile-tabs{display:flex;gap:20px;padding:0 20px;border-bottom:1px solid var(--line);overflow:auto}.profile-grid{display:grid;grid-template-columns:1fr 1fr;gap:4px;padding:4px}.grid-item{position:relative;overflow:hidden}.grid-item img,.grid-item video{width:100%;height:200px;object-fit:cover;display:block}
+.discovery-banner{background:var(--surface2);border-radius:12px;padding:15px;display:flex;gap:15px;align-items:flex-start;position:relative;margin-bottom:25px}.banner-icon{font-size:20px}.banner-text h3{font-size:15px;margin-bottom:5px}.banner-text p{font-size:12px;color:#888;line-height:1.4}.close-banner{background:none;border:0;color:#777;margin-left:auto}.section-header{display:flex;justify-content:space-between;font-weight:700;font-size:16px}.posts-count{color:#777;font-size:13px}
+.create-btn{background:none;border:1px solid #444;color:var(--text);padding:6px 14px;border-radius:20px;font-size:12px;font-weight:600}.spaces-header{padding:0 20px 10px}.spaces-subnav{align-items:center;justify-content:space-between}.dot{height:6px;width:6px;background:var(--gold);border-radius:50%;display:inline-block}.search-icon{color:#777}.spaces-categories{padding:10px 20px}.category-row{display:flex;align-items:center;justify-content:space-between;padding:12px 0;border-bottom:1px solid var(--line)}.category-row img{width:40px;height:40px;border-radius:6px;object-fit:cover}.category-row span{flex:1;margin-left:15px;font-size:16px;font-weight:500}.category-row i{color:#777}
+.studio-empty{flex:1;display:flex;flex-direction:column;justify-content:center;align-items:center;text-align:center;padding:30px}.studio-icon-box{position:relative;font-size:80px;margin-bottom:25px}.plus-badge{position:absolute;bottom:5px;right:-10px;font-size:24px;background:var(--bg);border-radius:50%;padding:4px}.studio-empty h2{font-size:18px;margin-bottom:10px}.studio-empty p{font-size:13px;color:#888;margin-bottom:30px;line-height:1.5}.add-photo-btn{background:#fff;color:#000;border:0;padding:12px 24px;border-radius:25px;font-weight:800;font-size:13px}
+.bottom-nav{display:flex;justify-content:space-around;background:var(--bg);border-top:1px solid var(--line);padding:9px 3px calc(9px + env(safe-area-inset-bottom));flex-shrink:0;z-index:20}.nav-item{display:flex;flex-direction:column;align-items:center;text-decoration:none;color:var(--muted);font-size:9px;gap:4px;border:0;background:none;min-width:45px}.nav-item i{font-size:17px}.nav-item.active{color:var(--text)}
+.overlay{position:fixed;inset:0;background:rgba(0,0,0,.55);z-index:50;display:none;align-items:flex-end}.overlay.show{display:flex}.panel{width:min(430px,100%);margin:auto;background:var(--surface);border-radius:24px 24px 0 0;padding:24px 20px calc(20px + env(safe-area-inset-bottom))}.panel h2{font-size:24px;margin-bottom:18px}.panel input{width:100%;padding:13px;border:1px solid var(--line);background:transparent;color:var(--text);border-radius:12px;margin-bottom:10px;outline:none}.panel button{width:100%;padding:13px;border-radius:12px;border:0;background:var(--text);color:var(--bg);font-weight:700;margin-top:5px}.panel .cancel{background:transparent;color:var(--muted)}
+.viewer{position:fixed;inset:0;background:#000;color:#fff;z-index:100;display:none;flex-direction:column}.viewer.show{display:flex}.viewer-top{display:flex;justify-content:space-between;align-items:center;padding:20px}.viewer-top button{background:none;border:0;color:#fff;font-size:20px}.viewer-stage{flex:1;display:grid;place-items:center;padding:20px}.viewer-stage img,.viewer-stage video{max-width:100%;max-height:100%;object-fit:contain}
+@media(min-width:431px){.app-container{height:100vh;border-left:1px solid #222;border-right:1px solid #222}}
 </style>
 </head>
 <body>
-<div class="app">
-<div id="prog"></div>
-<header class="header">
-  <div class="brand">LUMR</div>
-  <div></div>
-  <div class="header-right">
-    <button class="icon-btn" id="themeBtn" aria-label="Theme"></button>
-    <button class="icon-btn" id="menuBtn" aria-label="Menu"></button>
-  </div>
-</header>
-<main id="content"></main>
-<nav class="bottom" id="nav"></nav>
+<div class="app-container">
+<section class="screen active" id="image-1">
+<header class="top-bar"><button class="menu-btn" onclick="switchScreen('image-2',null)">☰</button><h1 class="screen-title">Feed</h1><button class="pro-btn">NEW FOR PRO</button></header>
+<div class="sub-nav"><span class="tab active">For you</span><span class="tab">Following</span></div>
+<main class="content"><div class="feed-card"><div class="image-container"><img id="feedImage" src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=800&q=85"></div><div class="card-footer"><div class="user-info"><img class="avatar" src="https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?auto=format&fit=crop&w=100&q=80"><span class="username">dhyan</span></div><div class="actions"><span>☆</span><span>↻</span><span>♡</span><span class="badge">AU5</span></div></div></div></main>
+</section>
 
-<div class="sheet-bg" id="newCol"><div class="sheet">
-<h2>New collection</h2><input id="colName" maxlength="24" placeholder="e.g. Summer">
-<button class="btn" id="colOk">Create collection</button><button class="btn ghost" data-close>Cancel</button>
-</div></div>
+<section class="screen" id="image-2">
+<header class="top-bar menu-top"><button class="close-btn" onclick="switchScreen('image-1',null)">×</button><button class="upgrade-btn">♢ UPGRADE</button></header>
+<div class="menu-content">
+<div class="menu-section-title">CONNECT</div><ul class="menu-list"><li>Activity</li><li>Messages</li><li>Favorites</li><li>People</li></ul>
+<div class="menu-section-title">FROM LUMR</div><ul class="menu-list"><li><div class="menu-item-flex"><span>◉ Capture</span><span class="new-tag">NEW</span></div><small class="menu-desc">Advanced camera and tools</small></li><li><div class="menu-item-flex"><span>▦ Canvas</span><span class="new-tag">NEW</span></div><small class="menu-desc">Moodboarding and visual planning</small></li></ul>
+<div class="menu-section-title">ACCOUNT</div><ul class="menu-list"><li>Privacy & Data</li><li>Support</li><li>Safety</li><li>About</li><li>Settings</li><li>Sign out</li></ul>
+</div></section>
 
-<div class="sheet-bg" id="editP"><div class="sheet">
-<h2>Edit profile</h2>
-<label class="btn ghost" style="text-align:center">Change photo<input type="file" id="avIn" accept="image/*" hidden></label>
-<input id="pName" maxlength="40" placeholder="Name"><input id="pLoc" maxlength="40" placeholder="Location">
-<button class="btn" id="pOk">Save profile</button><button class="btn ghost" data-close>Cancel</button>
-</div></div>
+<section class="screen" id="image-3-4">
+<header class="top-bar"><button class="menu-btn" onclick="switchScreen('image-2',null)">☰</button><span class="username-top">mahimfd</span><div class="top-icons"><span>✎</span><span>•••</span></div></header>
+<div class="profile-header"><div class="profile-info"><h2 class="profile-name">mahi</h2><p class="profile-bio">grounded in the present where all futures die</p></div><img id="profileAvatar" src="https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?auto=format&fit=crop&w=150&q=80" class="profile-avatar"></div>
+<div class="profile-buttons"><button class="btn-primary" onclick="showProfileEditor()">MY GALLERIES</button><button class="btn-secondary">BUILD SITE</button></div>
+<div class="profile-tabs"><span class="tab active">Recent</span><span class="tab">Albums</span><span class="tab">Spaces</span><span class="tab">Reposts</span></div>
+<main class="content profile-grid" id="profileGrid"><div class="grid-item"><img src="https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=500&q=85"></div><div class="grid-item"><img src="https://images.unsplash.com/photo-1470071459604-3b5ec3a7fe05?auto=format&fit=crop&w=500&q=85"></div></main>
+</section>
 
-<div id="viewer">
-<div class="viewer-bar"><button id="vClose" aria-label="Close"></button><span class="viewer-title" id="vTitle"></span><div>
-<button id="vFav" aria-label="Save" style="margin-right:18px"></button><button id="vDel" aria-label="Delete"></button></div></div>
-<div class="stage" id="stage"></div>
+<section class="screen" id="image-5">
+<header class="top-bar"><button class="menu-btn" onclick="switchScreen('image-2',null)">☰</button><h1 class="screen-title">Discover</h1><button class="search-btn">⌕</button></header>
+<div class="content"><div class="discovery-banner"><div class="banner-icon">☆</div><div class="banner-text"><h3>Favorite inspiring images</h3><p>Hold down an image and tap the star icon. Favoriting images will help customize what you see here.</p></div><button class="close-banner" onclick="this.parentElement.remove()">×</button></div><div class="section-header"><span>#DoubleTake</span><span class="posts-count">588 posts</span></div></div>
+</section>
+
+<section class="screen" id="image-6">
+<header class="top-bar"><button class="menu-btn" onclick="switchScreen('image-2',null)">☰</button><button class="create-btn" onclick="document.getElementById('fileInput').click()">Create</button></header>
+<div class="spaces-header"><h1 class="screen-title">Spaces</h1></div>
+<div class="sub-nav spaces-subnav"><span class="tab">Contributing <span class="dot"></span></span><span class="tab">Following</span><span class="tab active">Browse</span><span class="search-icon">⌕</span></div>
+<div class="spaces-categories"><div class="category-row"><img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=100&q=80"><span>Portraits</span><span>›</span></div><div class="category-row"><img src="https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?auto=format&fit=crop&w=100&q=80"><span>Fashion</span><span>›</span></div><div class="category-row"><img src="https://images.unsplash.com/photo-1470071459604-3b5ec3a7fe05?auto=format&fit=crop&w=100&q=80"><span>Nature</span><span>›</span></div></div>
+</section>
+
+<section class="screen" id="image-7">
+<header class="top-bar"><button class="menu-btn" onclick="switchScreen('image-2',null)">☰</button><h1 class="screen-title">Studio</h1><button class="camera-btn" onclick="document.getElementById('fileInput').click()">◉</button></header>
+<div class="studio-empty"><div class="studio-icon-box">▧<span class="plus-badge">+</span></div><h2>Add a photo from your camera roll to start editing.</h2><p>Elevate any photo instantly with professional presets, tools, effects and more.</p><button class="add-photo-btn" onclick="document.getElementById('fileInput').click()">▧ ADD PHOTO</button></div>
+</section>
+
+<nav class="bottom-nav">
+<button class="nav-item active" data-screen="image-1" onclick="switchScreen('image-1',this)">⌂<span>Feed</span></button>
+<button class="nav-item" data-screen="image-5" onclick="switchScreen('image-5',this)">⌕<span>Discover</span></button>
+<button class="nav-item" data-screen="image-7" onclick="switchScreen('image-7',this)">▧<span>Studio</span></button>
+<button class="nav-item" data-screen="image-7" onclick="switchScreen('image-7',this)">✦<span>AI Lab</span></button>
+<button class="nav-item" data-screen="image-3-4" onclick="switchScreen('image-3-4',this)">◉<span>Profile</span></button>
+<button class="nav-item" data-screen="image-6" onclick="switchScreen('image-6',this)">▱<span>Spaces</span></button>
+</nav>
 </div>
-<div class="toast" id="toast"></div>
-<input type="file" id="fileIn" accept="image/*,video/*" multiple hidden>
-</div>
+
+<div class="overlay" id="profileEditor"><div class="panel"><h2>Edit profile</h2><input id="nameInput" value="mahi" placeholder="Name"><input id="bioInput" value="grounded in the present where all futures die" placeholder="Bio"><button onclick="saveProfile()">Save profile</button><button class="cancel" onclick="hideProfileEditor()">Cancel</button></div></div>
+<div class="viewer" id="viewer"><div class="viewer-top"><button onclick="closeViewer()">×</button><span>LUMR</span><button onclick="closeViewer()">Done</button></div><div class="viewer-stage" id="viewerStage"></div></div>
+<input id="fileInput" type="file" accept="image/*,video/*" multiple hidden>
 
 <script>
-const $=id=>document.getElementById(id);
-const icon=(path,fill=false)=>'<svg viewBox="0 0 24 24" fill="'+(fill?'currentColor':'none')+'" stroke="currentColor" stroke-width="1.8">'+path+'</svg>';
-const I={
-sun:'<circle cx="12" cy="12" r="4"/><path d="M12 2v2m0 16v2M4.93 4.93l1.42 1.42m11.3 11.3l1.42 1.42M2 12h2m16 0h2M4.93 19.07l1.42-1.42m11.3-11.3l1.42-1.42"/>',
-moon:'<path d="M20.8 15.2A8.5 8.5 0 0 1 8.8 3.2a8.5 8.5 0 1 0 12 12z"/>',
-menu:'<path d="M4 7h16M4 12h11M4 17h16"/>',
-home:'<path d="M3 10.5 12 3l9 7.5V21H3z"/><path d="M9 21v-7h6v7"/>',
-video:'<rect x="3" y="5" width="18" height="14" rx="2"/><path d="m10 9 5 3-5 3z"/>',
-saved:'<path d="M6 4a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v18l-6-3.7L6 22z"/>',
-user:'<circle cx="12" cy="8" r="4"/><path d="M4 21a8 8 0 0 1 16 0"/>',
-plus:'<path d="M12 5v14M5 12h14"/>',
-close:'<path d="m6 6 12 12M18 6 6 18"/>',
-trash:'<path d="M4 7h16M9 7V4h6v3m-9 0 1 14h10l1-14"/>'
-};
-
-let db,items=[],cols=[],prof={name:'Your Name',loc:'',avatar:null},screen='home',tab='all',cur=null,urls=[],dark=false;
-
-function openDB(){return new Promise((ok,no)=>{const r=indexedDB.open('lumr-db',1);r.onupgradeneeded=()=>{r.result.createObjectStore('media',{keyPath:'id'});r.result.createObjectStore('meta')};r.onsuccess=()=>{db=r.result;ok()};r.onerror=()=>no(r.error)})}
-const store=(n,m='readonly')=>db.transaction(n,m).objectStore(n);
-const promise=r=>new Promise((ok,no)=>{r.onsuccess=()=>ok(r.result);r.onerror=()=>no(r.error)});
-const getMeta=k=>promise(store('meta').get(k));
-const setMeta=(k,v)=>promise(store('meta','readwrite').put(v,k));
-const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
-
-async function init(){
-try{await openDB()}catch(e){$('content').innerHTML='<div class="empty"><div class="empty-title">Storage unavailable</div><p>Open LUMR in a normal browser window.</p></div>';return}
-cols=(await getMeta('cols'))||[];prof={...prof,...((await getMeta('prof'))||{})};dark=(await getMeta('theme'))==='dark';applyTheme();await load()
+const screens=[...document.querySelectorAll('.screen')];
+function switchScreen(id,el){
+ screens.forEach(s=>s.classList.remove('active'));
+ const target=document.getElementById(id);if(target)target.classList.add('active');
+ document.querySelectorAll('.nav-item').forEach(n=>n.classList.toggle('active',n.dataset.screen===id));
 }
-async function load(){items=(await promise(store('media').getAll())).sort((a,b)=>b.added-a.added);render()}
-
-function applyTheme(){document.documentElement.dataset.theme=dark?'dark':'light';$('themeBtn').innerHTML=icon(dark?I.sun:I.moon)}
-function toast(t){$('toast').textContent=t;$('toast').classList.add('on');setTimeout(()=>$('toast').classList.remove('on'),1700)}
-
-function render(){
-urls.forEach(URL.revokeObjectURL);urls=[];
-let list=items;
-const title=screen==='videos'?'Motion':screen==='saved'?'Saved':screen==='profile'?'Profile':'Visual journal';
-if(screen==='videos')list=items.filter(x=>x.type==='video');
-if(screen==='saved')list=items.filter(x=>x.fav);
-if(screen==='home'&&tab!=='all')list=items.filter(x=>x.col===tab);
-
-let h='';
-if(screen==='profile'){
-const photos=items.filter(x=>x.type==='image').length;
-let av='';
-if(prof.avatar){const u=URL.createObjectURL(prof.avatar);urls.push(u);av='style="background-image:url('+u+')"'}
-h+='<section class="profile"><div class="avatar" '+av+'>'+(!prof.avatar?esc((prof.name||'?')[0].toUpperCase()):'')+'</div><h2>'+esc(prof.name)+'</h2><p>'+esc(prof.loc||'Visual diary')+'</p><div class="stats"><div class="stat"><b>'+items.length+'</b><span>Posts</span></div><div class="stat"><b>'+photos+'</b><span>Photos</span></div><div class="stat"><b>'+(items.length-photos)+'</b><span>Videos</span></div></div><button class="edit" id="editBtn">Edit profile</button></section>';
-}else{
-h+='<section class="hero"><div><div class="hero-title">'+title+'</div></div><p class="hero-copy">A quiet space for photographs, moving images and fragments worth keeping.</p></section>';
-h+='<div class="filters"><button class="filter '+(tab==='all'?'active':'')+'" data-tab="all">All</button>';
-if(screen==='home')h+=cols.map(c=>'<button class="filter '+(tab===c?'active':'')+'" data-tab="'+esc(c)+'">'+esc(c)+'</button>').join('')+'<button class="filter" id="addCol">+ Collection</button>';
-h+='</div>';
+function showProfileEditor(){document.getElementById('profileEditor').classList.add('show')}
+function hideProfileEditor(){document.getElementById('profileEditor').classList.remove('show')}
+function saveProfile(){
+ const name=document.getElementById('nameInput').value.trim()||'mahi';
+ const bio=document.getElementById('bioInput').value.trim();
+ document.querySelector('.profile-name').textContent=name;
+ document.querySelector('.profile-bio').textContent=bio;
+ localStorage.setItem('lumr-profile',JSON.stringify({name,bio}));
+ hideProfileEditor();
 }
-h+='<div class="gallery" id="gallery"></div>';$('content').innerHTML=h;
-const g=$('gallery');
-if(!list.length)g.innerHTML='<div class="empty"><div class="empty-title">'+(screen==='saved'?'Nothing saved yet':'Your visual space is empty')+'</div><p>Use the + button to add photographs or videos.</p></div>';
-list.forEach((it,index)=>{
-const u=URL.createObjectURL(it.blob);urls.push(u);const b=document.createElement('button');b.className='item';b.style.animationDelay=Math.min(index*35,450)+'ms';
-const media=it.type==='video'?'<video src="'+u+'#t=0.1" preload="metadata" muted playsinline></video><span class="play">'+icon('<path d="m9 6 9 6-9 6z" fill="currentColor" stroke="none"/>')+'</span><span class="badge">VIDEO</span>':'<img src="'+u+'" loading="lazy" alt="LUMR visual">';
-b.innerHTML=media+'<span class="item-overlay"><span class="item-name">'+(it.col?esc(it.col):'LUMR')+'</span><span class="save-mini">'+icon(I.saved,it.fav)+'</span></span>';
-b.onclick=e=>{if(e.target.closest('.save-mini')){toggleFav(it);return}view(it,u)};g.appendChild(b)
+const saved=localStorage.getItem('lumr-profile');if(saved){try{const p=JSON.parse(saved);document.querySelector('.profile-name').textContent=p.name;document.querySelector('.profile-bio').textContent=p.bio}catch(e){}}
+document.getElementById('fileInput').addEventListener('change',e=>{
+ const files=[...e.target.files];const grid=document.getElementById('profileGrid');
+ files.forEach(file=>{
+  if(!file.type.startsWith('image/'))return;
+  const url=URL.createObjectURL(file),d=document.createElement('div');d.className='grid-item';
+  const img=document.createElement('img');img.src=url;d.appendChild(img);
+  d.onclick=()=>{document.getElementById('viewerStage').innerHTML='<img src="'+url+'">';document.getElementById('viewer').classList.add('show')};
+  grid.prepend(d);
+ });
+ e.target.value='';
+ switchScreen('image-3-4',null);
 });
-$('nav').innerHTML=['home','videos'].map(s=>'<button class="nav '+(screen===s?'active':'')+'" data-s="'+s+'">'+icon(I[s==='home'?'home':'video'])+'</button>').join('')+
-'<button class="upload" id="fab">'+icon(I.plus)+'</button>'+
-['saved','profile'].map(s=>'<button class="nav '+(screen===s?'active':'')+'" data-s="'+s+'">'+icon(I[s])+'</button>').join('');
-$('menuBtn').innerHTML=icon(I.menu)
-}
-
-async function toggleFav(it){it.fav=!it.fav;await promise(store('media','readwrite').put(it));toast(it.fav?'Saved':'Removed');if(screen==='saved')load()}
-function view(it,u){cur=it;$('vTitle').textContent=it.type==='video'?'Motion':'Photograph';$('stage').innerHTML=it.type==='video'?'<video src="'+u+'" controls autoplay playsinline></video>':'<img src="'+u+'" alt="">';$('vFav').innerHTML=icon(I.saved,it.fav);$('vDel').innerHTML=icon(I.trash);$('viewer').classList.add('on')}
-function closeViewer(){$('stage').innerHTML='';$('viewer').classList.remove('on');cur=null}
-
-document.addEventListener('click',e=>{
-const t=e.target.closest('[data-tab],[data-s],#addCol,#fab,#editBtn,[data-close]');
-if(!t)return;
-if(t.dataset.tab!==undefined){tab=t.dataset.tab;render()}
-else if(t.dataset.s){screen=t.dataset.s;render()}
-else if(t.id==='addCol'){$('colName').value='';$('newCol').classList.add('on');$('colName').focus()}
-else if(t.id==='fab')$('fileIn').click()
-else if(t.id==='editBtn'){$('pName').value=prof.name;$('pLoc').value=prof.loc;$('editP').classList.add('on')}
-else document.querySelectorAll('.sheet-bg').forEach(x=>x.classList.remove('on'))
-});
-$('themeBtn').onclick=async()=>{dark=!dark;await setMeta('theme',dark?'dark':'light');applyTheme()};
-$('menuBtn').onclick=()=>toast('LUMR · Visual Journal');
-$('colOk').onclick=async()=>{const n=$('colName').value.trim();if(n&&!cols.includes(n)){cols.push(n);await setMeta('cols',cols);tab=n}$('newCol').classList.remove('on');render()};
-$('pOk').onclick=async()=>{prof.name=$('pName').value.trim()||'Your Name';prof.loc=$('pLoc').value.trim();await setMeta('prof',prof);$('editP').classList.remove('on');render()};
-$('avIn').onchange=async e=>{const f=e.target.files[0];if(!f)return;prof.avatar=f;await setMeta('prof',prof);render()};
-$('fileIn').onchange=async e=>{
-const files=[...e.target.files].filter(f=>/^(image|video)\//.test(f.type));e.target.value='';if(!files.length)return;
-for(let i=0;i<files.length;i++){const f=files[i];try{await promise(store('media','readwrite').put({id:crypto.randomUUID(),type:f.type.startsWith('video')?'video':'image',blob:f,added:Date.now()+i,fav:false,col:screen==='home'&&tab!=='all'?tab:null}))}catch(err){toast('Storage is full');break}$('prog').style.width=((i+1)/files.length*100)+'%'}setTimeout(()=>$('prog').style.width='0',450);load()
-};
-$('vClose').onclick=closeViewer;
-$('vFav').onclick=async()=>{if(!cur)return;await toggleFav(cur);$('vFav').innerHTML=icon(I.saved,cur.fav)};
-$('vDel').onclick=async()=>{if(!cur||!confirm('Delete this permanently?'))return;await promise(store('media','readwrite').delete(cur.id));closeViewer();load()};
-document.addEventListener('keydown',e=>{if(e.key==='Escape')closeViewer()});
-init();
+function closeViewer(){document.getElementById('viewer').classList.remove('show');document.getElementById('viewerStage').innerHTML=''}
+document.querySelectorAll('.grid-item').forEach(x=>x.onclick=()=>{const img=x.querySelector('img');document.getElementById('viewerStage').innerHTML='<img src="'+img.src+'">';document.getElementById('viewer').classList.add('show')});
 </script>
 </body>
 </html>
