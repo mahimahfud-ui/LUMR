@@ -121,6 +121,18 @@ create policy media_delete_own on public.media for delete to authenticated using
 grant select,insert,update,delete on public.profiles to anon,authenticated;
 grant select,insert,update,delete on public.media to anon,authenticated;
 
+-- Enable live media updates for authenticated sessions. Ignore duplicate publication membership.
+do $
+begin
+  if exists(select 1 from pg_publication where pubname='supabase_realtime') then
+    begin
+      alter publication supabase_realtime add table public.media;
+    exception when duplicate_object then
+      null;
+    end;
+  end if;
+end$;
+
 insert into storage.buckets(id,name,public,file_size_limit)
 values('media','media',true,536870912)
 on conflict(id) do update set public=true,file_size_limit=536870912;
