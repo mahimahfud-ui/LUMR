@@ -54,6 +54,33 @@ a{color:inherit;text-decoration:none}button,input,textarea{font:inherit}button{c
 @keyframes rise{to{opacity:1;transform:none}}
 @media(max-width:700px){.section{width:calc(100% - 24px)}.topbar{padding:14px}.hero{min-height:92svh;padding-bottom:56px}.hero-orbit{right:-10vw;top:15vh;width:58vw;height:58vw;opacity:.4}.hero h1{font-size:clamp(52px,16vw,86px)}.top-actions .social{display:none}.grid{grid-template-columns:repeat(6,1fr);gap:7px}.card{grid-column:span 3!important;min-height:240px}.card:nth-child(1),.card:nth-child(4){grid-column:span 6!important;min-height:340px}.head{flex-direction:column;align-items:flex-start}.minimal-strip{grid-template-columns:1fr}.footer{flex-direction:column}}
 @media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}*,*:before,*:after{animation:none!important;transition:none!important}#webgl{display:none}}
+</style><style id="mahimahfud-center-cinematic">
+/* centered editorial direction */
+.topbar{justify-content:center}
+.topbar .brand{position:absolute;left:50%;transform:translateX(-50%)}
+.top-actions{position:absolute;right:clamp(14px,4vw,54px);margin:0}
+.hero{justify-content:center;text-align:center;padding-bottom:84px}
+.hero-copy{max-width:760px;margin:0 auto}
+.hero .eyebrow,.hero-sub{margin-left:auto;margin-right:auto}
+.hero-actions{justify-content:center}
+.hero-orbit{left:50%;right:auto;transform:translateX(-50%);top:15vh;pointer-events:none;opacity:.34}
+.gallery .head,.minimal-strip,.cta{text-align:center}
+.gallery .head{display:block}
+.gallery .meta{justify-content:center;margin-top:10px}
+.minimal-strip{display:block}
+.minimal-strip h3,.minimal-strip p{max-width:680px;margin-left:auto;margin-right:auto}
+.creator-grid{justify-content:center}
+.cta{display:block}
+.cta h2,.cta p{margin-left:auto;margin-right:auto}
+.cta .pill{margin-inline:auto}
+.footer{justify-content:center;text-align:center}
+.footer>div{justify-content:center}
+@media(max-width:700px){
+  .topbar .brand{position:static;transform:none}
+  .topbar{justify-content:center}
+  .top-actions{right:12px}
+  .hero-orbit{top:17vh;width:78vw;height:78vw;opacity:.24}
+}
 </style></head><body>
 <div id="webgl"></div><div class="grain"></div>
 <header class="topbar"><a class="brand" href="/">mahimahfud</a><div class="top-actions">
