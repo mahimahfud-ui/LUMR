@@ -1,19 +1,10 @@
 import express from 'express';
-import { fileURLToPath } from 'url';
-import { dirname, join } from 'path';
-
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = dirname(__filename);
-
-const app = express();
-const PORT = process.env.PORT || 3000;
-
-app.use(express.static(__dirname));
-
-app.get('*', (req, res) => {
-  res.sendFile(join(__dirname, 'index.html'));
-});
-
-app.listen(PORT, '0.0.0.0', () => {
-  console.log(`Server running at http://0.0.0.0:${PORT}`);
-});
+import {fileURLToPath} from 'url';
+import {dirname,join} from 'path';
+const __filename=fileURLToPath(import.meta.url),__dirname=dirname(__filename);
+const app=express(),PORT=process.env.PORT||3000;
+app.disable('x-powered-by');
+app.use(express.static(__dirname,{etag:true,maxAge:'1h',setHeaders(res){res.setHeader('X-Content-Type-Options','nosniff');res.setHeader('Referrer-Policy','strict-origin-when-cross-origin')}}));
+app.get('/api/config',(req,res)=>{res.setHeader('Cache-Control','no-store');res.json({supabaseUrl:process.env.SUPABASE_URL||'',publishableKey:process.env.SUPABASE_PUBLISHABLE_KEY||process.env.SUPABASE_ANON_KEY||'',youtubeUrl:process.env.YOUTUBE_URL||''})});
+app.get('*',(req,res)=>res.sendFile(join(__dirname,'index.html')));
+app.listen(PORT,'0.0.0.0',()=>console.log('mahimahfud running on '+PORT));
