@@ -47,6 +47,111 @@ end$$;
 create index if not exists media_user_created_idx on public.media(user_id,created_at desc);
 create schema if not exists private;
 
+create table if not exists public.username_reservations(
+ username text primary key check(username ~ '^[a-z0-9_.-]{3,24}
+create or replace function private.handle_new_user()
+returns trigger
+language plpgsql
+security definer
+set search_path = pg_catalog, public
+as $$
+declare
+  requested_username text;
+  display_value text;
+begin
+  requested_username := lower(trim(coalesce(new.raw_user_meta_data->>'username','')));
+  display_value := trim(coalesce(new.raw_user_meta_data->>'display_name',requested_username));
+
+  if requested_username = '' or requested_username !~ '^[a-z0-9_.-]{3,24}$' then
+    raise exception 'USERNAME_INVALID';
+  end if;
+
+  insert into public.username_reservations(username,user_id)
+  values(requested_username,new.id);
+
+  insert into public.profiles(id,username,display_name)
+  values(new.id,requested_username,coalesce(nullif(display_value,''),requested_username));
+
+  return new;
+exception
+  when unique_violation then
+    raise exception 'USERNAME_TAKEN';
+end;
+$$;
+revoke all on function private.handle_new_user() from public;
+drop trigger if exists on_auth_user_created on auth.users;
+create trigger on_auth_user_created after insert on auth.users for each row execute function private.handle_new_user();
+
+create or replace function private.prevent_username_change()
+returns trigger
+language plpgsql
+as $
+begin
+  if new.username is distinct from old.username then
+    raise exception 'USERNAME_IMMUTABLE';
+  end if;
+  return new;
+end;
+$;
+revoke all on function private.prevent_username_change() from public;
+drop trigger if exists profiles_username_immutable on public.profiles;
+create trigger profiles_username_immutable
+before update of username on public.profiles
+for each row execute function private.prevent_username_change();
+
+alter table public.profiles enable row level security;
+alter table public.media enable row level security;
+
+drop policy if exists profiles_public_read on public.profiles;
+create policy profiles_public_read on public.profiles for select to anon,authenticated using(true);
+drop policy if exists profiles_insert_own on public.profiles;
+create policy profiles_insert_own on public.profiles for insert to authenticated with check((select auth.uid())=id);
+drop policy if exists profiles_update_own on public.profiles;
+create policy profiles_update_own on public.profiles for update to authenticated using((select auth.uid())=id) with check((select auth.uid())=id);
+
+drop policy if exists media_public_read on public.media;
+create policy media_public_read on public.media for select to anon,authenticated using(visibility='public' or (select auth.uid())=user_id);
+drop policy if exists media_insert_own on public.media;
+create policy media_insert_own on public.media for insert to authenticated with check((select auth.uid())=user_id);
+drop policy if exists media_update_own on public.media;
+create policy media_update_own on public.media for update to authenticated using((select auth.uid())=user_id) with check((select auth.uid())=user_id);
+drop policy if exists media_delete_own on public.media;
+create policy media_delete_own on public.media for delete to authenticated using((select auth.uid())=user_id);
+
+grant select,insert,update,delete on public.profiles to anon,authenticated;
+grant select,insert,update,delete on public.media to anon,authenticated;
+
+insert into storage.buckets(id,name,public,file_size_limit)
+values('media','media',true,536870912)
+on conflict(id) do update set public=true,file_size_limit=536870912;
+
+drop policy if exists media_bucket_insert on storage.objects;
+create policy media_bucket_insert on storage.objects for insert to authenticated
+with check(bucket_id='media' and (storage.foldername(name))[1]=(select auth.uid()::text));
+
+drop policy if exists media_bucket_update on storage.objects;
+create policy media_bucket_update on storage.objects for update to authenticated
+using(bucket_id='media' and (storage.foldername(name))[1]=(select auth.uid()::text))
+with check(bucket_id='media' and (storage.foldername(name))[1]=(select auth.uid()::text));
+
+drop policy if exists media_bucket_delete on storage.objects;
+create policy media_bucket_delete on storage.objects for delete to authenticated
+using(bucket_id='media' and (storage.foldername(name))[1]=(select auth.uid()::text));),
+ user_id uuid references auth.users(id) on delete set null,
+ reserved_at timestamptz not null default now()
+);
+
+alter table public.username_reservations enable row level security;
+revoke all on public.username_reservations from anon,authenticated;
+
+-- Seed every username that already exists, and permanently reserve the site owner handle.
+insert into public.username_reservations(username,user_id)
+select lower(username),id from public.profiles
+on conflict(username) do nothing;
+insert into public.username_reservations(username,user_id)
+values('mahimahfud',null)
+on conflict(username) do nothing;
+
 create or replace function private.handle_new_user()
 returns trigger language plpgsql security definer set search_path=public
 as $$
