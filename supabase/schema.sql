@@ -32,6 +32,18 @@ create table if not exists public.media(
  updated_at timestamptz not null default now()
 );
 
+do $$
+begin
+ if not exists(select 1 from pg_constraint where conname='media_video_duration_check') then
+   alter table public.media add constraint media_video_duration_check
+   check(type='image' or (duration is not null and duration >= 0 and duration <= 90));
+ end if;
+ if not exists(select 1 from pg_constraint where conname='media_video_resolution_check') then
+   alter table public.media add constraint media_video_resolution_check
+   check(type='image' or (width is not null and height is not null and greatest(width,height) <= 1920 and least(width,height) <= 1080));
+ end if;
+end$$;
+
 create index if not exists media_user_created_idx on public.media(user_id,created_at desc);
 create schema if not exists private;
 
