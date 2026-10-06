@@ -1,0 +1,8 @@
+{
+  "name": "Moments",
+  "description": "A personal photo and video moments gallery and collection organizer.",
+  "permissions": [],
+  "capabilities": [
+    "MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"
+  ]
+}

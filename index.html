@@ -1,123 +1,1324 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-theme="dark">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<title>LUMR — Visual Journal</title>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, maximum-scale=1.0, user-scalable=no">
+<title>Moments</title>
+<meta name="description" content="A personal photo and video moments gallery and collection organizer.">
+<meta property="og:title" content="Moments">
+<meta property="og:description" content="A personal photo and video moments gallery and collection organizer.">
+<link href="https://fonts.googleapis.com/css2?family=Grand+Hotel&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 <style>
-*{margin:0;padding:0;box-sizing:border-box}
-:root{--bg:#000;--surface:#111;--surface2:#181818;--text:#fff;--muted:#777;--line:#222;--gold:#ffcc66}
-[data-theme=light]{--bg:#f7f7f5;--surface:#fff;--surface2:#eee;--text:#111;--muted:#777;--line:#ddd}
-html,body{width:100%;height:100%;background:#121212;color:var(--text);font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif}
-button{font:inherit;color:inherit;cursor:pointer}
-.app-container{width:100%;max-width:430px;height:100dvh;margin:auto;background:var(--bg);display:flex;flex-direction:column;position:relative;overflow:hidden;box-shadow:0 0 60px rgba(0,0,0,.35)}
-.screen{flex:1;display:none;flex-direction:column;overflow-y:auto;min-height:0}.screen.active{display:flex}
-.top-bar{display:flex;justify-content:space-between;align-items:center;padding:15px 20px;min-height:58px;flex-shrink:0}
-.menu-btn,.search-btn,.camera-btn,.close-btn{background:none;border:0;color:var(--text);font-size:20px}
-.screen-title{font-size:24px;font-weight:700}.pro-btn,.upgrade-btn{background:var(--gold);color:#000;border:0;padding:7px 12px;border-radius:20px;font-size:10px;font-weight:800}
-.sub-nav{display:flex;gap:25px;padding:0 20px 15px;border-bottom:1px solid var(--line);flex-shrink:0}.tab{font-size:15px;color:var(--muted);cursor:pointer;font-weight:500}.tab.active{color:var(--text);position:relative}.tab.active:after{content:"";position:absolute;left:0;right:0;bottom:-16px;height:2px;background:var(--text)}
-.content{flex:1;padding:15px;overflow:auto}.feed-card{background:var(--surface2);border-radius:8px;overflow:hidden;margin-bottom:20px}.image-container img{width:100%;display:block;aspect-ratio:4/5;object-fit:cover}.card-footer{display:flex;justify-content:space-between;align-items:center;padding:12px 15px}.user-info{display:flex;align-items:center;gap:10px}.avatar,.profile-avatar{border-radius:50%;object-fit:cover}.avatar{width:32px;height:32px}.username{font-size:14px;font-weight:600}.actions{display:flex;align-items:center;gap:14px;font-size:15px;color:#ccc}.badge{background:#6a32d8;color:#fff;font-size:9px;padding:3px 6px;border-radius:6px;font-weight:bold}
-.menu-top{justify-content:space-between}.menu-content{padding:10px 20px 90px;overflow:auto}.menu-section-title{font-size:10px;color:var(--muted);letter-spacing:1.4px;margin:25px 0 10px}.menu-list{list-style:none}.menu-list li{padding:13px 0;font-size:17px;border-bottom:1px solid var(--line);color:var(--text)}.menu-item-flex{display:flex;justify-content:space-between;align-items:center}.new-tag{background:#e2e8f0;color:#000;font-size:9px;padding:3px 6px;border-radius:4px;font-weight:800}.menu-desc{color:var(--muted);font-size:12px;display:block;margin-top:4px}
-.username-top{font-weight:600;font-size:16px}.top-icons{display:flex;gap:20px;font-size:18px}.profile-header{display:flex;justify-content:space-between;padding:20px}.profile-name{font-size:28px;margin-bottom:8px}.profile-bio{font-size:13px;color:#aaa;max-width:255px}.profile-avatar{width:70px;height:70px}.profile-buttons{display:flex;gap:10px;padding:0 20px 20px}.btn-primary,.btn-secondary{flex:1;padding:10px;border-radius:20px;font-weight:700;font-size:11px;border:1px solid #444;background:#fff;color:#000}.btn-secondary{background:transparent;color:var(--text)}.profile-tabs{display:flex;gap:20px;padding:0 20px;border-bottom:1px solid var(--line);overflow:auto}.profile-grid{display:grid;grid-template-columns:1fr 1fr;gap:4px;padding:4px}.grid-item{position:relative;overflow:hidden}.grid-item img,.grid-item video{width:100%;height:200px;object-fit:cover;display:block}
-.discovery-banner{background:var(--surface2);border-radius:12px;padding:15px;display:flex;gap:15px;align-items:flex-start;position:relative;margin-bottom:25px}.banner-icon{font-size:20px}.banner-text h3{font-size:15px;margin-bottom:5px}.banner-text p{font-size:12px;color:#888;line-height:1.4}.close-banner{background:none;border:0;color:#777;margin-left:auto}.section-header{display:flex;justify-content:space-between;font-weight:700;font-size:16px}.posts-count{color:#777;font-size:13px}
-.create-btn{background:none;border:1px solid #444;color:var(--text);padding:6px 14px;border-radius:20px;font-size:12px;font-weight:600}.spaces-header{padding:0 20px 10px}.spaces-subnav{align-items:center;justify-content:space-between}.dot{height:6px;width:6px;background:var(--gold);border-radius:50%;display:inline-block}.search-icon{color:#777}.spaces-categories{padding:10px 20px}.category-row{display:flex;align-items:center;justify-content:space-between;padding:12px 0;border-bottom:1px solid var(--line)}.category-row img{width:40px;height:40px;border-radius:6px;object-fit:cover}.category-row span{flex:1;margin-left:15px;font-size:16px;font-weight:500}.category-row i{color:#777}
-.studio-empty{flex:1;display:flex;flex-direction:column;justify-content:center;align-items:center;text-align:center;padding:30px}.studio-icon-box{position:relative;font-size:80px;margin-bottom:25px}.plus-badge{position:absolute;bottom:5px;right:-10px;font-size:24px;background:var(--bg);border-radius:50%;padding:4px}.studio-empty h2{font-size:18px;margin-bottom:10px}.studio-empty p{font-size:13px;color:#888;margin-bottom:30px;line-height:1.5}.add-photo-btn{background:#fff;color:#000;border:0;padding:12px 24px;border-radius:25px;font-weight:800;font-size:13px}
-.bottom-nav{display:flex;justify-content:space-around;background:var(--bg);border-top:1px solid var(--line);padding:9px 3px calc(9px + env(safe-area-inset-bottom));flex-shrink:0;z-index:20}.nav-item{display:flex;flex-direction:column;align-items:center;text-decoration:none;color:var(--muted);font-size:9px;gap:4px;border:0;background:none;min-width:45px}.nav-item i{font-size:17px}.nav-item.active{color:var(--text)}
-.overlay{position:fixed;inset:0;background:rgba(0,0,0,.55);z-index:50;display:none;align-items:flex-end}.overlay.show{display:flex}.panel{width:min(430px,100%);margin:auto;background:var(--surface);border-radius:24px 24px 0 0;padding:24px 20px calc(20px + env(safe-area-inset-bottom))}.panel h2{font-size:24px;margin-bottom:18px}.panel input{width:100%;padding:13px;border:1px solid var(--line);background:transparent;color:var(--text);border-radius:12px;margin-bottom:10px;outline:none}.panel button{width:100%;padding:13px;border-radius:12px;border:0;background:var(--text);color:var(--bg);font-weight:700;margin-top:5px}.panel .cancel{background:transparent;color:var(--muted)}
-.viewer{position:fixed;inset:0;background:#000;color:#fff;z-index:100;display:none;flex-direction:column}.viewer.show{display:flex}.viewer-top{display:flex;justify-content:space-between;align-items:center;padding:20px}.viewer-top button{background:none;border:0;color:#fff;font-size:20px}.viewer-stage{flex:1;display:grid;place-items:center;padding:20px}.viewer-stage img,.viewer-stage video{max-width:100%;max-height:100%;object-fit:contain}
-@media(min-width:431px){.app-container{height:100vh;border-left:1px solid #222;border-right:1px solid #222}}
+:root{
+  --bg:#000000;
+  --bg2:#121212;
+  --line:#262626;
+  --tx:#f5f5f5;
+  --mu:#a8a8a8;
+  --blue:#0095f6;
+  --inp:#181818;
+  --ring:linear-gradient(45deg,#feda75,#fa7e1e,#d62976,#962fbf,#4f5bd5);
+  --blank-avatar:#242424;
+}
+[data-theme=light]{
+  --bg:#ffffff;
+  --bg2:#fafafa;
+  --line:#dbdbdb;
+  --tx:#111111;
+  --mu:#737373;
+  --inp:#f2f2f2;
+  --blank-avatar:#e4e4e4;
+}
+*{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{height:100%;background:var(--bg2);color:var(--tx);font:400 14px/1.4 Inter,-apple-system,system-ui,sans-serif}
+body{display:flex;justify-content:center;transition:background-color .25s ease,color .25s ease}
+button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
+input,textarea{font:inherit;color:inherit}
+svg{display:block}
+.hide{display:none!important}
+.wrap{
+  width:100%;
+  max-width:470px;
+  height:100dvh;
+  background:var(--bg);
+  display:flex;
+  flex-direction:column;
+  position:relative;
+  overflow:hidden;
+  padding-top:env(safe-area-inset-top,0);
+  transition:background-color .25s ease,border-color .25s ease;
+}
+@media(min-width:500px){
+  .wrap{
+    height:min(880px,96dvh);
+    border-radius:28px;
+    border:1px solid var(--line);
+    box-shadow:0 25px 60px -15px rgba(0,0,0,0.6);
+    margin:auto;
+  }
+}
+.logo{font-family:'Grand Hotel',cursive;font-weight:400;letter-spacing:.5px}
+
+/* Theme Icon - Strictly at the very top-left corner across all views */
+.top-theme-btn{
+  width:38px;
+  height:38px;
+  display:grid;
+  place-items:center;
+  border-radius:50%;
+  color:var(--tx);
+  flex:none;
+  transition:background .15s, transform .15s;
+}
+.top-theme-btn:hover{background:rgba(128,128,128,0.15)}
+.top-theme-btn:active{transform:scale(0.92)}
+.top-theme-btn svg{width:21px;height:21px}
+
+/* Auth Screen */
+#auth{overflow-y:auto;align-items:center;padding:24px 28px;justify-content:center;position:relative}
+.auth-top-bar{position:absolute;top:calc(14px + env(safe-area-inset-top,0));left:16px;right:16px;display:flex;justify-content:space-between;align-items:center;z-index:10}
+.auth-guest-link{font-size:13px;color:var(--blue);font-weight:600;padding:6px 12px;border-radius:8px;background:rgba(0,149,246,0.1);transition:background .15s}
+.auth-guest-link:hover{background:rgba(0,149,246,0.18)}
+#auth .logo{font-size:52px;margin-bottom:6px;line-height:1.1;color:var(--tx);margin-top:22px}
+#auth .sub{color:var(--mu);text-align:center;font-weight:500;font-size:14px;margin-bottom:20px;max-width:280px;line-height:1.4}
+
+/* Auth Segmented Tabs (Log In / Sign Up) */
+.auth-tabs{
+  display:flex;
+  background:var(--inp);
+  border:1px solid var(--line);
+  border-radius:12px;
+  padding:3px;
+  margin-bottom:18px;
+  width:100%;
+}
+.auth-tab{
+  flex:1;
+  padding:10px 0;
+  text-align:center;
+  font-size:13.5px;
+  font-weight:600;
+  border-radius:9px;
+  color:var(--mu);
+  transition:all .15s;
+}
+.auth-tab.on{
+  background:var(--bg);
+  color:var(--tx);
+  box-shadow:0 2px 8px rgba(0,0,0,0.25);
+}
+
+#auth form{width:100%;display:flex;flex-direction:column;gap:11px}
+.fi{background:var(--inp);border:1px solid var(--line);border-radius:10px;padding:12px 14px;width:100%;font-size:14px;outline:0;color:var(--tx);transition:border-color .15s}
+.fi:focus{border-color:var(--mu)}
+.pw{position:relative}
+.pw button{position:absolute;right:14px;top:50%;transform:translateY(-50%);font-weight:600;font-size:13px;color:var(--mu)}
+.btn{background:var(--blue);color:#fff;border-radius:12px;padding:12px;font-weight:600;width:100%;text-align:center;transition:opacity .15s, transform .1s}
+.btn:active{opacity:.85;transform:scale(0.98)}
+.btn.alt{background:var(--line);color:var(--tx);padding:9px 16px;border-radius:9px;font-size:13.5px}
+.err{color:#ed4956;font-size:13px;text-align:center;min-height:18px;margin-top:2px;font-weight:500}
+.sw{margin-top:18px;border:1px solid var(--line);border-radius:12px;padding:14px;text-align:center;width:100%;font-size:13.5px;color:var(--mu)}
+.sw a{color:var(--blue);font-weight:600;cursor:pointer;margin-left:4px}
+
+/* Top Bar */
+.top{
+  height:56px;
+  flex:none;
+  display:flex;
+  align-items:center;
+  gap:8px;
+  padding:0 12px;
+  border-bottom:1px solid var(--line);
+  position:relative;
+  z-index:30;
+  background:var(--bg);
+}
+.top-title{font-size:16px;font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.ib{width:38px;height:38px;display:grid;place-items:center;border-radius:50%;transition:opacity .15s, background .15s;flex:none}
+.ib:hover{background:rgba(128,128,128,0.12)}
+.ib:active{transform:scale(0.92)}
+.ib svg{width:22px;height:22px}
+
+/* Center Search Box in Top Bar */
+.top-search-wrap{
+  flex:1;
+  position:relative;
+  display:flex;
+  align-items:center;
+  min-width:0;
+}
+.top-search-inp{
+  width:100%;
+  height:36px;
+  background:var(--inp);
+  border:1px solid var(--line);
+  border-radius:18px;
+  padding:0 14px 0 34px;
+  font-size:13px;
+  color:var(--tx);
+  outline:none;
+  transition:border-color .15s, background .15s;
+}
+.top-search-inp:focus{border-color:var(--mu)}
+.top-search-icon{
+  position:absolute;
+  left:10px;
+  width:16px;
+  height:16px;
+  color:var(--mu);
+  pointer-events:none;
+}
+.top-search-clear{
+  position:absolute;
+  right:8px;
+  width:20px;
+  height:20px;
+  display:grid;
+  place-items:center;
+  color:var(--mu);
+  border-radius:50%;
+}
+
+/* Instant Search Dropdown */
+.search-dropdown{
+  position:absolute;
+  top:46px;
+  left:0;
+  right:0;
+  background:var(--bg);
+  border:1px solid var(--line);
+  border-radius:14px;
+  box-shadow:0 14px 30px rgba(0,0,0,0.5);
+  max-height:360px;
+  overflow-y:auto;
+  z-index:100;
+  padding:6px;
+}
+.search-item{
+  display:flex;
+  align-items:center;
+  gap:12px;
+  padding:8px 10px;
+  border-radius:10px;
+  width:100%;
+  text-align:left;
+  transition:background .15s;
+}
+.search-item:hover{background:rgba(128,128,128,0.12)}
+.search-item b{display:block;font-size:13.5px;color:var(--tx)}
+.search-item small{display:block;font-size:12px;color:var(--mu)}
+
+/* Top Bar Auth Buttons (Log In & Sign Up) */
+.top-auth-wrap{
+  display:flex;
+  align-items:center;
+  gap:5px;
+  flex:none;
+}
+.top-auth-btn{
+  font-size:12px;
+  font-weight:600;
+  padding:6px 11px;
+  border-radius:14px;
+  color:var(--tx);
+  border:1px solid var(--line);
+  background:var(--inp);
+  white-space:nowrap;
+  cursor:pointer;
+  transition:all .15s;
+}
+.top-auth-btn:hover{background:rgba(128,128,128,0.15)}
+.top-auth-btn:active{transform:scale(0.96)}
+.top-auth-btn.primary{
+  background:var(--blue);
+  color:#ffffff;
+  border-color:var(--blue);
+  box-shadow:0 2px 8px rgba(0,149,246,0.25);
+}
+.top-auth-btn.primary:hover{opacity:.92}
+
+#main{flex:1;min-height:0;overflow-y:auto;scrollbar-width:none}
+#main::-webkit-scrollbar{display:none}
+
+/* Nav Bar with Perfectly Adjusted Plus / Auth Slot */
+nav{
+  height:54px;
+  flex:none;
+  border-top:1px solid var(--line);
+  display:flex;
+  justify-content:space-around;
+  align-items:center;
+  margin-bottom:env(safe-area-inset-bottom,0);
+  background:var(--bg);
+  padding:0 8px;
+}
+nav .ib{opacity:.55}
+nav .ib.on{opacity:1}
+
+/* Nav Auth Segmented Button Group (Takes the exact Plus Icon Slot!) */
+.nav-auth-group{
+  display:inline-flex;
+  align-items:center;
+  background:var(--inp);
+  border:1px solid var(--line);
+  border-radius:20px;
+  padding:2px 3px;
+  gap:2px;
+  flex:none;
+  box-shadow:0 2px 10px rgba(0,0,0,0.2);
+}
+.nav-auth-btn{
+  font-size:12px;
+  font-weight:600;
+  padding:6px 12px;
+  border-radius:16px;
+  color:var(--tx);
+  background:transparent;
+  transition:background .15s, color .15s, transform .1s;
+  white-space:nowrap;
+}
+.nav-auth-btn:hover{
+  background:rgba(128,128,128,0.12);
+}
+.nav-auth-btn:active{
+  transform:scale(0.96);
+}
+.nav-auth-btn.primary{
+  background:var(--blue);
+  color:#ffffff;
+  box-shadow:0 2px 8px rgba(0,149,246,0.3);
+}
+.nav-auth-btn.primary:hover{
+  opacity:0.92;
+}
+
+.mini{
+  width:26px;
+  height:26px;
+  border-radius:50%;
+  overflow:hidden;
+  background:var(--blank-avatar);
+  display:grid;
+  place-items:center;
+  font-size:12px;
+  font-weight:700;
+  color:var(--mu);
+}
+nav .on .mini{outline:2px solid var(--tx);outline-offset:1px}
+.mini img,.av img{width:100%;height:100%;object-fit:cover;display:block}
+
+/* Blank Silhouette Avatar like Instagram / Facebook */
+.av{
+  border-radius:50%;
+  overflow:hidden;
+  background:var(--blank-avatar);
+  display:grid;
+  place-items:center;
+  font-weight:700;
+  color:var(--mu);
+  flex:none;
+  position:relative;
+}
+.av svg{width:62%;height:62%;fill:currentColor}
+.rg{padding:3px;border-radius:50%;background:var(--ring);flex:none;display:inline-flex}
+.rg .av{border:3px solid var(--bg)}
+
+/* Feed */
+.post{border-bottom:1px solid var(--line);padding-bottom:10px}
+.ph{display:flex;align-items:center;gap:10px;padding:10px 14px;cursor:pointer}
+.ph b{font-weight:600;font-size:14px}
+.pm{background:var(--bg2);display:flex;justify-content:center;position:relative;overflow:hidden}
+.pm img,.pm video{width:100%;max-height:76vh;object-fit:contain;display:block;image-rendering:high-quality}
+.pa{display:flex;align-items:center;justify-content:space-between;padding:8px 12px 2px}
+.pa-left{display:flex;align-items:center;gap:6px}
+.pa .ib svg{width:25px;height:25px}
+.liked svg{fill:#ed4956;stroke:#ed4956}
+.pi{padding:2px 14px;color:var(--mu);font-size:12.5px;line-height:1.5}
+.pi b{color:var(--tx);font-weight:600}
+
+/* Profile */
+.pr{padding:16px 16px 8px}
+.row{display:flex;align-items:center;gap:20px}
+.stats{display:flex;flex:1;justify-content:space-around;text-align:center}
+.stats b{display:block;font-size:17px;font-weight:700;color:var(--tx)}
+.stats span{font-size:12.5px;color:var(--mu)}
+.pn{font-weight:600;margin-top:12px;font-size:15px}
+.pb{white-space:pre-wrap;margin-top:4px;font-size:13.5px;color:var(--tx);line-height:1.4}
+.btns{display:flex;gap:8px;margin-top:14px}
+.privacy-badge{
+  display:inline-flex;
+  align-items:center;
+  gap:5px;
+  background:rgba(128,128,128,0.12);
+  color:var(--mu);
+  font-size:12px;
+  padding:4px 10px;
+  border-radius:12px;
+  margin-top:0;
+}
+.guest-profile-auth-box{
+  width:100%;
+  background:var(--inp);
+  border:1px solid var(--line);
+  border-radius:14px;
+  padding:12px;
+}
+
+/* Profile Tabs: All / Videos / Images */
+.tabs{display:flex;border-top:1px solid var(--line);margin-top:14px}
+.tabs button{
+  flex:1;
+  padding:11px 0;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  gap:7px;
+  border-top:2px solid transparent;
+  margin-top:-1px;
+  opacity:.45;
+  font-size:12.5px;
+  font-weight:600;
+  letter-spacing:.3px;
+  text-transform:uppercase;
+  transition:all .15s;
+}
+.tabs button.on{border-color:var(--tx);opacity:1;color:var(--tx)}
+.tabs svg{width:18px;height:18px}
+
+.g{display:grid;grid-template-columns:repeat(3,1fr);gap:2px}
+.gi{aspect-ratio:1;background:var(--bg2);position:relative;overflow:hidden;display:block}
+.gi img,.gi video{width:100%;height:100%;object-fit:cover;display:block}
+.gi i{position:absolute;top:6px;right:6px;color:#fff;filter:drop-shadow(0 1px 2px rgba(0,0,0,0.8))}
+.gi i svg{width:18px;height:18px}
+.em{text-align:center;padding:70px 24px;color:var(--mu);font-size:14px}
+.em b{display:block;color:var(--tx);font-size:18px;font-weight:600;margin-bottom:6px}
+
+/* Dedicated Search Screen */
+.sb{padding:12px 16px}
+.u{display:flex;align-items:center;gap:12px;padding:10px 16px;width:100%;text-align:left;transition:background .15s;border-radius:10px}
+.u:hover{background:rgba(128,128,128,0.08)}
+.u b{display:block;font-size:14px;color:var(--tx)}
+.u small{display:block;color:var(--mu);font-size:12.5px}
+
+/* Sheet & Modal Layer */
+.bg{position:absolute;inset:0;background:rgba(0,0,0,0.7);backdrop-filter:blur(4px);z-index:60;display:flex;align-items:flex-end}
+.sh{background:var(--bg);width:100%;border-radius:20px 20px 0 0;padding:16px 20px calc(24px + env(safe-area-inset-bottom,0));display:flex;flex-direction:column;gap:12px;border-top:1px solid var(--line)}
+.sh h3{text-align:center;font-size:16px;font-weight:700}
+.sh .hd{width:36px;height:4px;border-radius:2px;background:var(--mu);opacity:.5;margin:0 auto 4px}
+.sh textarea{resize:none}
+.opt{padding:14px 6px;text-align:left;font-size:15px;font-weight:500;border-bottom:1px solid var(--line);width:100%;display:flex;align-items:center;justify-content:space-between}
+.opt.red{color:#ed4956;border:0;font-weight:600}
+.opt:hover{opacity:.85}
+
+/* High Quality Viewer */
+#vw{position:absolute;inset:0;background:#000000;z-index:70;display:flex;flex-direction:column;color:#ffffff}
+#vw .bar{display:flex;justify-content:space-between;align-items:center;padding:12px 14px;padding-top:calc(12px + env(safe-area-inset-top,0))}
+#vw .st{flex:1;min-height:0;display:grid;place-items:center;padding:10px}
+#vw .st img,#vw .st video{max-width:100%;max-height:100%;object-fit:contain;border-radius:8px}
+#vw .ft{padding:14px 18px calc(16px + env(safe-area-inset-bottom,0));display:flex;justify-content:space-between;align-items:center;font-size:13px;background:linear-gradient(to top, rgba(0,0,0,0.85), transparent)}
+#vw .ft a{color:#ffffff;border:1px solid rgba(255,255,255,0.35);border-radius:8px;padding:7px 14px;text-decoration:none;font-weight:600;transition:background .15s}
+#vw .ft a:hover{background:rgba(255,255,255,0.15)}
+
+#pg{position:absolute;top:0;left:0;height:3px;background:var(--ring);width:0;z-index:90;transition:width .2s}
+#toast{position:absolute;bottom:80px;left:50%;transform:translateX(-50%);background:var(--tx);color:var(--bg);padding:10px 20px;border-radius:24px;font-weight:600;font-size:13.5px;z-index:95;opacity:0;pointer-events:none;transition:opacity .2s;white-space:nowrap;box-shadow:0 8px 24px rgba(0,0,0,0.35)}
+#toast.on{opacity:1}
+:focus-visible{outline:2px solid var(--blue);outline-offset:2px}
 </style>
 </head>
 <body>
-<div class="app-container">
-<section class="screen active" id="image-1">
-<header class="top-bar"><button class="menu-btn" onclick="switchScreen('image-2',null)">☰</button><h1 class="screen-title">Feed</h1><button class="pro-btn">NEW FOR PRO</button></header>
-<div class="sub-nav"><span class="tab active">For you</span><span class="tab">Following</span></div>
-<main class="content"><div class="feed-card"><div class="image-container"><img id="feedImage" src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=800&q=85"></div><div class="card-footer"><div class="user-info"><img class="avatar" src="https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?auto=format&fit=crop&w=100&q=80"><span class="username">dhyan</span></div><div class="actions"><span>☆</span><span>↻</span><span>♡</span><span class="badge">AU5</span></div></div></div></main>
-</section>
 
-<section class="screen" id="image-2">
-<header class="top-bar menu-top"><button class="close-btn" onclick="switchScreen('image-1',null)">×</button><button class="upgrade-btn">♢ UPGRADE</button></header>
-<div class="menu-content">
-<div class="menu-section-title">CONNECT</div><ul class="menu-list"><li>Activity</li><li>Messages</li><li>Favorites</li><li>People</li></ul>
-<div class="menu-section-title">FROM LUMR</div><ul class="menu-list"><li><div class="menu-item-flex"><span>◉ Capture</span><span class="new-tag">NEW</span></div><small class="menu-desc">Advanced camera and tools</small></li><li><div class="menu-item-flex"><span>▦ Canvas</span><span class="new-tag">NEW</span></div><small class="menu-desc">Moodboarding and visual planning</small></li></ul>
-<div class="menu-section-title">ACCOUNT</div><ul class="menu-list"><li>Privacy & Data</li><li>Support</li><li>Safety</li><li>About</li><li>Settings</li><li>Sign out</li></ul>
-</div></section>
+<!-- AUTH SCREEN (Create Account / Login) -->
+<div class="wrap hide" id="auth">
+  <div class="auth-top-bar">
+    <button class="top-theme-btn" data-a="theme" aria-label="Toggle Theme">
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"/>
+      </svg>
+    </button>
+    <button class="auth-guest-link" data-a="browseGuest">Browse as Guest &rarr;</button>
+  </div>
 
-<section class="screen" id="image-3-4">
-<header class="top-bar"><button class="menu-btn" onclick="switchScreen('image-2',null)">☰</button><span class="username-top">mahimfd</span><div class="top-icons"><span>✎</span><span>•••</span></div></header>
-<div class="profile-header"><div class="profile-info"><h2 class="profile-name">mahi</h2><p class="profile-bio">grounded in the present where all futures die</p></div><img id="profileAvatar" src="https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?auto=format&fit=crop&w=150&q=80" class="profile-avatar"></div>
-<div class="profile-buttons"><button class="btn-primary" onclick="showProfileEditor()">MY GALLERIES</button><button class="btn-secondary">BUILD SITE</button></div>
-<div class="profile-tabs"><span class="tab active">Recent</span><span class="tab">Albums</span><span class="tab">Spaces</span><span class="tab">Reposts</span></div>
-<main class="content profile-grid" id="profileGrid"><div class="grid-item"><img src="https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=500&q=85"></div><div class="grid-item"><img src="https://images.unsplash.com/photo-1470071459604-3b5ec3a7fe05?auto=format&fit=crop&w=500&q=85"></div></main>
-</section>
+  <div class="logo">mahimahfud</div>
+  <div class="sub" id="asub">Create an account to share photos and videos in high quality.</div>
 
-<section class="screen" id="image-5">
-<header class="top-bar"><button class="menu-btn" onclick="switchScreen('image-2',null)">☰</button><h1 class="screen-title">Discover</h1><button class="search-btn">⌕</button></header>
-<div class="content"><div class="discovery-banner"><div class="banner-icon">☆</div><div class="banner-text"><h3>Favorite inspiring images</h3><p>Hold down an image and tap the star icon. Favoriting images will help customize what you see here.</p></div><button class="close-banner" onclick="this.parentElement.remove()">×</button></div><div class="section-header"><span>#DoubleTake</span><span class="posts-count">588 posts</span></div></div>
-</section>
-
-<section class="screen" id="image-6">
-<header class="top-bar"><button class="menu-btn" onclick="switchScreen('image-2',null)">☰</button><button class="create-btn" onclick="document.getElementById('fileInput').click()">Create</button></header>
-<div class="spaces-header"><h1 class="screen-title">Spaces</h1></div>
-<div class="sub-nav spaces-subnav"><span class="tab">Contributing <span class="dot"></span></span><span class="tab">Following</span><span class="tab active">Browse</span><span class="search-icon">⌕</span></div>
-<div class="spaces-categories"><div class="category-row"><img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=100&q=80"><span>Portraits</span><span>›</span></div><div class="category-row"><img src="https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?auto=format&fit=crop&w=100&q=80"><span>Fashion</span><span>›</span></div><div class="category-row"><img src="https://images.unsplash.com/photo-1470071459604-3b5ec3a7fe05?auto=format&fit=crop&w=100&q=80"><span>Nature</span><span>›</span></div></div>
-</section>
-
-<section class="screen" id="image-7">
-<header class="top-bar"><button class="menu-btn" onclick="switchScreen('image-2',null)">☰</button><h1 class="screen-title">Studio</h1><button class="camera-btn" onclick="document.getElementById('fileInput').click()">◉</button></header>
-<div class="studio-empty"><div class="studio-icon-box">▧<span class="plus-badge">+</span></div><h2>Add a photo from your camera roll to start editing.</h2><p>Elevate any photo instantly with professional presets, tools, effects and more.</p><button class="add-photo-btn" onclick="document.getElementById('fileInput').click()">▧ ADD PHOTO</button></div>
-</section>
-
-<nav class="bottom-nav">
-<button class="nav-item active" data-screen="image-1" onclick="switchScreen('image-1',this)">⌂<span>Feed</span></button>
-<button class="nav-item" data-screen="image-5" onclick="switchScreen('image-5',this)">⌕<span>Discover</span></button>
-<button class="nav-item" data-screen="image-7" onclick="switchScreen('image-7',this)">▧<span>Studio</span></button>
-<button class="nav-item" data-screen="image-7" onclick="switchScreen('image-7',this)">✦<span>AI Lab</span></button>
-<button class="nav-item" data-screen="image-3-4" onclick="switchScreen('image-3-4',this)">◉<span>Profile</span></button>
-<button class="nav-item" data-screen="image-6" onclick="switchScreen('image-6',this)">▱<span>Spaces</span></button>
-</nav>
+  <!-- Clear Segmented Tabs: Log In & Sign Up -->
+  <div class="auth-tabs">
+    <button type="button" class="auth-tab" id="tabLogin" data-a="tabLogin">Log In</button>
+    <button type="button" class="auth-tab on" id="tabSignup" data-a="tabSignup">Sign Up</button>
+  </div>
+  
+  <form id="af" autocomplete="on">
+    <input class="fi" id="aid" placeholder="Email" autocomplete="username" required>
+    <input class="fi" id="aun" placeholder="Username" autocomplete="off" maxlength="24">
+    <div class="pw">
+      <input class="fi" id="apw" type="password" placeholder="Password" autocomplete="current-password" required>
+      <button type="button" data-a="eye">Show</button>
+    </div>
+    <button class="btn" id="abtn" style="margin-top:6px">Create Account</button>
+    <div class="err" id="aerr" role="alert"></div>
+  </form>
+  
+  <div class="sw" id="asw">Have an account? <a data-a="tabLogin">Log in</a></div>
 </div>
 
-<div class="overlay" id="profileEditor"><div class="panel"><h2>Edit profile</h2><input id="nameInput" value="mahi" placeholder="Name"><input id="bioInput" value="grounded in the present where all futures die" placeholder="Bio"><button onclick="saveProfile()">Save profile</button><button class="cancel" onclick="hideProfileEditor()">Cancel</button></div></div>
-<div class="viewer" id="viewer"><div class="viewer-top"><button onclick="closeViewer()">×</button><span>LUMR</span><button onclick="closeViewer()">Done</button></div><div class="viewer-stage" id="viewerStage"></div></div>
-<input id="fileInput" type="file" accept="image/*,video/*" multiple hidden>
+<!-- MAIN APP SCREEN -->
+<div class="wrap hide" id="app">
+  <div id="pg"></div>
+  <div id="toast"></div>
+  <div class="top" id="top"></div>
+  <div id="main"></div>
+  <nav id="nav"></nav>
+  <div id="layer"></div>
+</div>
+
+<!-- File input for Images & Videos -->
+<input type="file" id="fileImage" accept="image/*" multiple hidden>
+<input type="file" id="fileVideo" accept="video/*" multiple hidden>
 
 <script>
-const screens=[...document.querySelectorAll('.screen')];
-function switchScreen(id,el){
- screens.forEach(s=>s.classList.remove('active'));
- const target=document.getElementById(id);if(target)target.classList.add('active');
- document.querySelectorAll('.nav-item').forEach(n=>n.classList.toggle('active',n.dataset.screen===id));
+const $=s=>document.querySelector(s);
+const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+
+const I={
+ home:'<path d="M3 10l9-7 9 7v10a1 1 0 0 1-1 1h-5v-7H9v7H4a1 1 0 0 1-1-1z"/>',
+ search:'<circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/>',
+ plus:'<rect x="3" y="3" width="18" height="18" rx="5"/><path d="M12 8v8M8 12h8"/>',
+ heart:'<path d="M12 21s-8-5.2-8-11a4.5 4.5 0 0 1 8-2.8A4.5 4.5 0 0 1 20 10c0 5.8-8 11-8 11z"/>',
+ menu:'<path d="M4 7h16M4 12h16M4 17h16"/>',
+ back:'<path d="M15 5l-7 7 7 7"/>',
+ grid:'<rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/>',
+ vid:'<rect x="3" y="5" width="18" height="14" rx="3"/><path d="M10 9.5v5l4-2.5z"/>',
+ img:'<rect x="3" y="4" width="18" height="16" rx="2"/><circle cx="9" cy="10" r="1.6"/><path d="M21 16l-5-5-9 9"/>',
+ x:'<path d="M18 6L6 18M6 6l12 12"/>',
+ trash:'<path d="M3 6h18M8 6V4h8v2M6 6l1 14h10l1-14"/>',
+ play:'<path d="M7 4l13 8-13 8z" fill="currentColor"/>',
+ lock:'<rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/>'
+};
+const ic=(k,w=2)=>`<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="${w}" stroke-linecap="round" stroke-linejoin="round">${I[k]}</svg>`;
+
+let db,users=[],media=[],me=null,view={n:'feed'},mode='signup',cur=null;
+const um=new WeakMap();
+const U=b=>{
+  if(!b)return '';
+  if(!um.has(b))um.set(b,URL.createObjectURL(b));
+  return um.get(b);
+};
+
+const pr=r=>new Promise((ok,no)=>{r.onsuccess=()=>ok(r.result);r.onerror=()=>no(r.error)});
+const st=(s,m)=>db.transaction(s,m||'readonly').objectStore(s);
+const put=(s,o)=>pr(st(s,'readwrite').put(o));
+const fmt=b=>b>1e9?(b/1e9).toFixed(2)+' GB':b>1e6?(b/1e6).toFixed(1)+' MB':Math.round(b/1e3)+' KB';
+
+async function hash(p){
+  try{
+    const b=await crypto.subtle.digest('SHA-256',new TextEncoder().encode('mm_salt_v3:'+p));
+    return[...new Uint8Array(b)].map(x=>x.toString(16).padStart(2,'0')).join('');
+  }catch(e){
+    return 'p:'+encodeURIComponent(p);
+  }
 }
-function showProfileEditor(){document.getElementById('profileEditor').classList.add('show')}
-function hideProfileEditor(){document.getElementById('profileEditor').classList.remove('show')}
-function saveProfile(){
- const name=document.getElementById('nameInput').value.trim()||'mahi';
- const bio=document.getElementById('bioInput').value.trim();
- document.querySelector('.profile-name').textContent=name;
- document.querySelector('.profile-bio').textContent=bio;
- localStorage.setItem('lumr-profile',JSON.stringify({name,bio}));
- hideProfileEditor();
+
+const toast=t=>{
+  const e=$('#toast');
+  e.textContent=t;
+  e.classList.add('on');
+  setTimeout(()=>e.classList.remove('on'),2000);
+};
+
+const user=id=>users.find(u=>u.id===id);
+
+// Default Blank Silhouette SVG for all accounts until user uploads custom picture
+const BLANK_SVG=`<svg viewBox="0 0 24 24"><path d="M12 12c2.2 0 4-1.8 4-4s-1.8-4-4-4-4 1.8-4 4 1.8 4 4 4zm0 2c-2.7 0-8 1.3-8 4v2h16v-2c0-2.7-5.3-4-8-4z"/></svg>`;
+
+const av=(u,s,ring)=>{
+  let content = BLANK_SVG;
+  if (u && u.avatar) {
+    content = `<img src="${U(u.avatar)}" alt="">`;
+  }
+  const a = `<div class="av" style="width:${s}px;height:${s}px">${content}</div>`;
+  return ring ? `<div class="rg">${a}</div>` : a;
+};
+
+// Fast thumbnail extraction for videos
+function generateVideoThumbnail(file) {
+  return new Promise((resolve) => {
+    try {
+      const video = document.createElement('video');
+      video.preload = 'metadata';
+      video.muted = true;
+      video.playsInline = true;
+      const url = URL.createObjectURL(file);
+      video.src = url;
+      video.currentTime = 0.5;
+
+      video.onloadeddata = () => {
+        setTimeout(() => {
+          try {
+            const canvas = document.createElement('canvas');
+            canvas.width = Math.min(video.videoWidth || 640, 640);
+            canvas.height = Math.round(canvas.width * ((video.videoHeight || 360) / (video.videoWidth || 640)));
+            const ctx = canvas.getContext('2d');
+            ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
+            canvas.toBlob(blob => {
+              URL.revokeObjectURL(url);
+              resolve(blob);
+            }, 'image/jpeg', 0.85);
+          } catch(e) {
+            URL.revokeObjectURL(url);
+            resolve(null);
+          }
+        }, 120);
+      };
+      video.onerror = () => { URL.revokeObjectURL(url); resolve(null); };
+      setTimeout(() => { URL.revokeObjectURL(url); resolve(null); }, 2200);
+    } catch(e) {
+      resolve(null);
+    }
+  });
 }
-const saved=localStorage.getItem('lumr-profile');if(saved){try{const p=JSON.parse(saved);document.querySelector('.profile-name').textContent=p.name;document.querySelector('.profile-bio').textContent=p.bio}catch(e){}}
-document.getElementById('fileInput').addEventListener('change',e=>{
- const files=[...e.target.files];const grid=document.getElementById('profileGrid');
- files.forEach(file=>{
-  if(!file.type.startsWith('image/'))return;
-  const url=URL.createObjectURL(file),d=document.createElement('div');d.className='grid-item';
-  const img=document.createElement('img');img.src=url;d.appendChild(img);
-  d.onclick=()=>{document.getElementById('viewerStage').innerHTML='<img src="'+url+'">';document.getElementById('viewer').classList.add('show')};
-  grid.prepend(d);
- });
- e.target.value='';
- switchScreen('image-3-4',null);
+
+// Starter Seed Profiles & Media for instant demo experience
+const SEED_DATA = [
+  {
+    user: { id: 'u-mahimahfud', email: 'mahimahfud@gmail.com', username: 'mahimahfud', name: 'Mahi Mahfud', bio: 'Visual designer & creator. Preserving every pixel in high original quality.', avatar: null },
+    password: 'password123',
+    posts: [
+      { id: 'm-1', type: 'image', url: 'https://images.unsplash.com/photo-1508739773434-c26b3d09e071?auto=format&fit=crop&w=1400&q=90', name: 'Cyberpunk Skyline.jpg', size: 2450000, added: Date.now() - 3600000 * 24 },
+      { id: 'm-2', type: 'video', url: 'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerBlazes.mp4', thumbUrl: 'https://images.unsplash.com/photo-1592478411213-6153e4ebc07d?auto=format&fit=crop&w=800&q=80', name: 'Blaze Motion.mp4', size: 14200000, added: Date.now() - 3600000 * 18 }
+    ]
+  },
+  {
+    user: { id: 'u-iljamiskov', email: 'ilja@miskov.com', username: 'iljamiskov', name: 'Ilja Miskov', bio: 'VR headset spatial computing & digital concept art.', avatar: null },
+    password: 'password123',
+    posts: [
+      { id: 'm-3', type: 'image', url: 'https://images.unsplash.com/photo-1592478411213-6153e4ebc07d?auto=format&fit=crop&w=1400&q=90', name: 'VR Spatial Concept.jpg', size: 3100000, added: Date.now() - 3600000 * 12 },
+      { id: 'm-4', type: 'image', url: 'https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?auto=format&fit=crop&w=1400&q=90', name: '3D Render Sphere.jpg', size: 1850000, added: Date.now() - 3600000 * 6 }
+    ]
+  }
+];
+
+async function seedInitialDatabase() {
+  const currentUsers = await pr(st('users').getAll());
+  if (!currentUsers || currentUsers.length === 0) {
+    for (const item of SEED_DATA) {
+      const u = { ...item.user, hash: await hash(item.password) };
+      await put('users', u);
+      for (const p of item.posts) {
+        try {
+          const resp = await fetch(p.url);
+          const blob = await resp.blob();
+          let thumbBlob = null;
+          if (p.thumbUrl) {
+            const tResp = await fetch(p.thumbUrl);
+            thumbBlob = await tResp.blob();
+          }
+          await put('media', {
+            id: p.id,
+            uid: u.id,
+            type: p.type,
+            blob: blob,
+            thumb: thumbBlob,
+            name: p.name,
+            size: p.size,
+            added: p.added,
+            likes: []
+          });
+        } catch(e) {
+          console.warn('Seed fetch skipped', e);
+        }
+      }
+    }
+  }
+}
+
+async function init(){
+  const t = localStorage.getItem('mm_theme') || 'dark';
+  document.documentElement.dataset.theme = t;
+
+  try {
+    db = await new Promise((ok, no) => {
+      const r = indexedDB.open('mahimahfud-v3-db', 1);
+      r.onupgradeneeded = () => {
+        r.result.createObjectStore('users', { keyPath: 'id' });
+        r.result.createObjectStore('media', { keyPath: 'id' });
+      };
+      r.onsuccess = () => ok(r.result);
+      r.onerror = () => no(r.error);
+    });
+  } catch(e) {
+    $('#aerr').textContent = 'Storage blocked. Open in a normal browser window.';
+    return;
+  }
+
+  await seedInitialDatabase();
+  await reload();
+
+  const savedSession = localStorage.getItem('mm_session');
+  me = user(savedSession) || null;
+
+  route();
+  try { navigator.storage?.persist?.(); } catch(e) {}
+}
+
+async function reload(){
+  users = await pr(st('users').getAll());
+  media = (await pr(st('media').getAll())).sort((a, b) => b.added - a.added);
+}
+
+function route(){
+  $('#auth').classList.add('hide');
+  $('#app').classList.remove('hide');
+  render();
+}
+
+function showAuth(m = 'login'){
+  closeS();
+  setMode(m);
+  $('#app').classList.add('hide');
+  $('#auth').classList.remove('hide');
+}
+
+/* ---------- Auth Flow ---------- */
+function setMode(m){
+  mode = m;
+  const s = m === 'signup';
+  $('#asub').textContent = s ? 'Create an account to share photos and videos in high quality.' : 'Log in with your password to manage your account.';
+  $('#aid').placeholder = s ? 'Email' : 'Email or @username';
+  $('#aun').classList.toggle('hide', !s);
+  $('#abtn').textContent = s ? 'Create Account' : 'Log In';
+  $('#aerr').textContent = '';
+  $('#asw').innerHTML = s ? 'Have an account? <a data-a="tabLogin">Log in</a>' : `Don't have an account? <a data-a="tabSignup">Sign up</a>`;
+  $('#apw').autocomplete = s ? 'new-password' : 'current-password';
+
+  const tabLogin = $('#tabLogin');
+  const tabSignup = $('#tabSignup');
+  if (tabLogin && tabSignup) {
+    tabLogin.classList.toggle('on', !s);
+    tabSignup.classList.toggle('on', s);
+  }
+}
+
+$('#af').onsubmit = async e => {
+  e.preventDefault();
+  const id = $('#aid').value.trim().toLowerCase();
+  const pw = $('#apw').value;
+  const er = $('#aerr');
+  er.textContent = '';
+
+  if (mode === 'signup') {
+    const un = $('#aun').value.trim().toLowerCase().replace(/^@/, '');
+    if (!/^\S+@\S+\.\S+$/.test(id)) return er.textContent = 'Enter a valid email address.';
+    if (!/^[a-z0-9._]{3,24}$/.test(un)) return er.textContent = 'Username: 3-24 letters, numbers, . or _';
+    if (pw.length < 6) return er.textContent = 'Password must be at least 6 characters.';
+    if (users.some(u => u.email === id)) return er.textContent = 'That email already has an account. Please log in.';
+    if (users.some(u => u.username === un)) return er.textContent = 'That username is taken.';
+
+    const u = {
+      id: crypto.randomUUID(),
+      email: id,
+      username: un,
+      name: un.charAt(0).toUpperCase() + un.slice(1),
+      bio: '',
+      hash: await hash(pw),
+      avatar: null
+    };
+
+    await put('users', u);
+    await reload();
+    me = user(u.id);
+  } else {
+    const u = users.find(x => x.email === id || x.username === id.replace(/^@/, ''));
+    if (!u || u.hash !== await hash(pw)) {
+      return er.textContent = 'Incorrect username or password. Access denied.';
+    }
+    me = u;
+  }
+
+  localStorage.setItem('mm_session', me.id);
+  $('#apw').value = '';
+  view = { n: 'profile', uid: me.id };
+  route();
+  toast(`Logged in as @${me.username}`);
+};
+
+/* ---------- Render Engine ---------- */
+function render(){
+  const v = view;
+  let top = '', body = '';
+
+  // Universal top-left theme switch button
+  const themeBtn = `
+    <button class="top-theme-btn" data-a="theme" aria-label="Toggle Dark / Light Theme" title="Toggle theme">
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"/>
+      </svg>
+    </button>
+  `;
+
+  // Center search box in top bar
+  const centerSearch = `
+    <div class="top-search-wrap">
+      <svg class="top-search-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/>
+      </svg>
+      <input class="top-search-inp" id="topSearchInp" placeholder="Search name or @username..." autocomplete="off" value="${esc(v.headerSearchQuery || '')}">
+      ${v.headerSearchQuery ? `<button class="top-search-clear" data-a="clearHeaderSearch">&times;</button>` : ''}
+      <div class="search-dropdown hide" id="topSearchDrop"></div>
+    </div>
+  `;
+
+  // Right action button: If logged in -> upload +; If guest -> Both Log in & Sign up buttons
+  const rightAction = me ? `
+    <button class="ib" data-a="plus" aria-label="Upload photo or video" title="Upload media">
+      ${ic('plus')}
+    </button>
+  ` : `
+    <div class="top-auth-wrap">
+      <button class="top-auth-btn" data-a="loginModal" title="Log in">Log in</button>
+      <button class="top-auth-btn primary" data-a="signupModal" title="Sign up">Sign up</button>
+    </div>
+  `;
+
+  if (v.n === 'feed') {
+    top = `
+      ${themeBtn}
+      ${centerSearch}
+      ${rightAction}
+    `;
+    body = media.length ? media.map(postHtml).join('') : `<div class="em"><b>No moments yet</b>Tap + to share high quality photos and videos.</div>`;
+
+  } else if (v.n === 'search') {
+    top = `
+      ${themeBtn}
+      ${centerSearch}
+      ${rightAction}
+    `;
+    body = `
+      <div class="sb">
+        <input class="fi" id="q" placeholder="Search people (@username)..." autocomplete="off" value="${esc(v.q || '')}">
+      </div>
+      <div id="res">${resHtml(v.q || '')}</div>
+    `;
+
+  } else {
+    // Profile view
+    const targetUid = v.uid || (me ? me.id : (users[0]?.id || ''));
+    const u = user(targetUid) || me || users[0];
+    const isOwner = me && u && u.id === me.id;
+    const list = media.filter(m => m.uid === u.id);
+    const photosList = list.filter(m => m.type === 'image');
+    const videosList = list.filter(m => m.type === 'video');
+
+    // Tab selection: 'all' (All), 'vid' (Videos), 'img' (Images)
+    const currentTab = v.tab || 'all';
+    let showMedia = list;
+    if (currentTab === 'vid') showMedia = videosList;
+    if (currentTab === 'img') showMedia = photosList;
+
+    top = `
+      ${themeBtn}
+      <div style="flex:1;display:flex;align-items:center;gap:6px;min-width:0">
+        <span class="top-title">@${esc(u ? u.username : 'profile')}</span>
+        ${!isOwner ? `<span class="privacy-badge">${ic('lock', 1.8)} Protected</span>` : ''}
+      </div>
+      ${isOwner ? `
+        <span style="display:flex;align-items:center;gap:2px">
+          <button class="ib" data-a="plus" aria-label="Upload">${ic('plus')}</button>
+          <button class="ib" data-a="settings" aria-label="Settings">${ic('menu')}</button>
+        </span>
+      ` : rightAction}
+    `;
+
+    body = `
+      <div class="pr">
+        <div class="row">
+          ${av(u, 82, true)}
+          <div class="stats">
+            <div><b>${list.length}</b><span>Posts</span></div>
+            <div><b>${photosList.length}</b><span>Photos</span></div>
+            <div><b>${videosList.length}</b><span>Videos</span></div>
+          </div>
+        </div>
+        <div class="pn">${esc(u.name || u.username)}</div>
+        ${u.bio ? `<div class="pb">${esc(u.bio)}</div>` : ''}
+
+        <div class="btns">
+          ${isOwner ? `
+            <button class="btn alt" data-a="edit" style="flex:1">Edit profile</button>
+            <button class="btn alt" data-a="plus" style="padding:9px 14px" title="Upload">${ic('plus')}</button>
+          ` : `
+            <div class="guest-profile-auth-box">
+              <div style="font-size:12.5px;color:var(--mu);margin-bottom:8px;text-align:center">
+                ${ic('lock', 1.8)} Protected Profile &middot; Log in or create an account to post
+              </div>
+              <div style="display:flex;gap:8px;width:100%">
+                <button class="btn alt" data-a="loginModal" style="flex:1;padding:8px">Log In</button>
+                <button class="btn" data-a="signupModal" style="flex:1;padding:8px">Sign Up</button>
+              </div>
+            </div>
+          `}
+        </div>
+      </div>
+
+      <!-- Requested Profile Tabs: All / Videos / Images -->
+      <div class="tabs">
+        <button class="${currentTab === 'all' ? 'on' : ''}" data-a="tab" data-t="all" aria-label="All">
+          ${ic('grid')} All
+        </button>
+        <button class="${currentTab === 'vid' ? 'on' : ''}" data-a="tab" data-t="vid" aria-label="Videos">
+          ${ic('vid')} Videos
+        </button>
+        <button class="${currentTab === 'img' ? 'on' : ''}" data-a="tab" data-t="img" aria-label="Images">
+          ${ic('img')} Images
+        </button>
+      </div>
+
+      ${showMedia.length ? `
+        <div class="g">
+          ${showMedia.map(m => `
+            <button class="gi" data-a="open" data-id="${m.id}" aria-label="Open">
+              ${m.type === 'video' ? `
+                <video src="${U(m.blob)}" poster="${m.thumb ? U(m.thumb) : ''}" preload="metadata" muted playsinline></video>
+                <i>${ic('play')}</i>
+              ` : `
+                <img src="${U(m.blob)}" loading="lazy" alt="">
+              `}
+            </button>
+          `).join('')}
+        </div>
+      ` : `
+        <div class="em">
+          <b>${isOwner ? 'Share your moments' : 'No posts in this category'}</b>
+          ${isOwner ? 'Photos and videos you upload are preserved in high original resolution.' : 'Nothing to show yet.'}
+        </div>
+      `}
+    `;
+  }
+
+  $('#top').innerHTML = top;
+  const keep = $('#main').scrollTop;
+  $('#main').innerHTML = body;
+  if (v.n === 'profile' && v.keep) $('#main').scrollTop = keep;
+
+  // Bottom Nav Bar: Perfectly adjusted 4-column layout
+  const on = (v.n === 'profile' && me && (v.uid || me.id) === me.id) ? 'me' : v.n;
+
+  $('#nav').innerHTML = `
+    <button class="ib ${on === 'feed' ? 'on' : ''}" data-a="go" data-n="feed" aria-label="Home" title="Home Feed">${ic('home')}</button>
+    <button class="ib ${on === 'search' ? 'on' : ''}" data-a="go" data-n="search" aria-label="Search" title="Search">${ic('search')}</button>
+    ${me ? `
+      <button class="ib" data-a="plus" aria-label="New post" title="Upload">${ic('plus')}</button>
+      <button class="ib ${on === 'me' ? 'on' : ''}" data-a="go" data-n="me" aria-label="Profile" title="My Profile">
+        <div class="mini">${me.avatar ? `<img src="${U(me.avatar)}" alt="">` : BLANK_SVG}</div>
+      </button>
+    ` : `
+      <!-- Adjusted Center Auth Slot in place of Plus Icon -->
+      <div class="nav-auth-group">
+        <button class="nav-auth-btn" data-a="loginModal" title="Log in">Log in</button>
+        <button class="nav-auth-btn primary" data-a="signupModal" title="Sign up">Sign up</button>
+      </div>
+      <button class="ib" data-a="loginModal" aria-label="Profile" title="Profile / Log in">
+        <div class="mini">${BLANK_SVG}</div>
+      </button>
+    `}
+  `;
+
+  // Setup center top search handler
+  const tSearchInp = $('#topSearchInp');
+  const tSearchDrop = $('#topSearchDrop');
+  if (tSearchInp && tSearchDrop) {
+    tSearchInp.oninput = () => {
+      const q = tSearchInp.value.trim().toLowerCase().replace(/^@/, '');
+      view.headerSearchQuery = tSearchInp.value;
+      if (!q) {
+        tSearchDrop.classList.add('hide');
+        tSearchDrop.innerHTML = '';
+        return;
+      }
+      const matched = users.filter(u => u.username.includes(q) || (u.name && u.name.toLowerCase().includes(q)));
+      if (matched.length) {
+        tSearchDrop.innerHTML = matched.map(u => `
+          <button class="search-item" data-a="user" data-uid="${u.id}">
+            ${av(u, 38)}
+            <div>
+              <b>@${esc(u.username)}</b>
+              <small>${esc(u.name || '')}</small>
+            </div>
+          </button>
+        `).join('');
+      } else {
+        tSearchDrop.innerHTML = `<div style="padding:12px;text-align:center;color:var(--mu);font-size:13px">No accounts found for "${esc(q)}"</div>`;
+      }
+      tSearchDrop.classList.remove('hide');
+    };
+
+    tSearchInp.onfocus = () => {
+      if (tSearchInp.value.trim()) {
+        tSearchInp.dispatchEvent(new Event('input'));
+      }
+    };
+  }
+
+  // Setup dedicated search tab input
+  const q = $('#q');
+  if (q) {
+    q.oninput = () => {
+      view.q = q.value;
+      $('#res').innerHTML = resHtml(q.value);
+    };
+  }
+}
+
+function postHtml(m){
+  const u = user(m.uid);
+  const liked = me && (m.likes || []).includes(me.id);
+  const n = (m.likes || []).length;
+  const dateStr = new Date(m.added).toLocaleDateString(undefined, { month: 'short', day: 'numeric', year: 'numeric' });
+
+  return `
+    <article class="post">
+      <div class="ph" data-a="user" data-uid="${m.uid}">
+        ${av(u, 36, true)}
+        <b>@${esc(u?.username || 'user')}</b>
+      </div>
+      <div class="pm">
+        ${m.type === 'video' ? `
+          <video src="${U(m.blob)}" poster="${m.thumb ? U(m.thumb) : ''}" controls playsinline preload="metadata"></video>
+        ` : `
+          <img src="${U(m.blob)}" loading="lazy" alt="" data-a="open" data-id="${m.id}" style="cursor:pointer">
+        `}
+      </div>
+      <div class="pa">
+        <div class="pa-left">
+          <button class="ib ${liked ? 'liked' : ''}" data-a="like" data-id="${m.id}" aria-label="Like" title="Like">
+            ${ic('heart')}
+          </button>
+          <button class="ib" data-a="open" data-id="${m.id}" aria-label="Full screen" title="Full screen">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:22px;height:22px">
+              <path d="M15 3h6v6M9 21H3v-6M21 3l-7 7M3 21l7-7"/>
+            </svg>
+          </button>
+        </div>
+      </div>
+      <div class="pi">
+        <b>${n} like${n === 1 ? '' : 's'}</b> &middot; ${dateStr} &middot; High quality ${fmt(m.size)}
+      </div>
+    </article>
+  `;
+}
+
+function resHtml(q){
+  q = q.trim().toLowerCase().replace(/^@/, '');
+  const r = users.filter(u => !q || u.username.includes(q) || (u.name && u.name.toLowerCase().includes(q)));
+  return r.length ? r.map(u => `
+    <button class="u" data-a="user" data-uid="${u.id}">
+      ${av(u, 44)}
+      <span>
+        <b>@${esc(u.username)}</b>
+        <small>${esc(u.name || '')}</small>
+      </span>
+    </button>
+  `).join('') : `<div class="em">No accounts found.</div>`;
+}
+
+/* ---------- Sheets & Viewer ---------- */
+const sheet = h => {
+  $('#layer').innerHTML = `<div class="bg" data-a="closeS"><div class="sh">${h}</div></div>`;
+};
+const closeS = () => $('#layer').innerHTML = '';
+
+function openV(m){
+  cur = m;
+  const isOwner = me && m.uid === me.id;
+  const u = user(m.uid);
+  $('#layer').innerHTML = `
+    <div id="vw">
+      <div class="bar">
+        <button class="ib" data-a="closeV" aria-label="Close">${ic('x')}</button>
+        <span style="font-weight:600;font-size:15px">@${esc(u?.username || '')}</span>
+        ${isOwner ? `<button class="ib" data-a="del" aria-label="Delete" style="color:#ed4956">${ic('trash')}</button>` : '<span style="width:36px"></span>'}
+      </div>
+      <div class="st">
+        ${m.type === 'video' ? `
+          <video src="${U(m.blob)}" controls autoplay playsinline loop></video>
+        ` : `
+          <img src="${U(m.blob)}" alt="">
+        `}
+      </div>
+      <div class="ft">
+        <span>High Quality &middot; ${fmt(m.size)}</span>
+        <a href="${U(m.blob)}" download="${esc(m.name)}">Download Original</a>
+      </div>
+    </div>
+  `;
+}
+
+/* ---------- Upload Selection Sheet (Images vs Videos) ---------- */
+function promptUploadChoice(){
+  if (!me) {
+    showAuth('signup');
+    return;
+  }
+  sheet(`
+    <div class="hd"></div>
+    <h3>Upload to Moments</h3>
+    <button class="opt" data-a="triggerUploadImage">
+      <span style="display:flex;align-items:center;gap:10px">
+        ${ic('img')} <b>Upload Image</b>
+      </span>
+      <span style="color:var(--mu);font-size:13px">Adds to Images &amp; All</span>
+    </button>
+    <button class="opt" data-a="triggerUploadVideo">
+      <span style="display:flex;align-items:center;gap:10px">
+        ${ic('vid')} <b>Upload Video</b>
+      </span>
+      <span style="color:var(--mu);font-size:13px">Adds to Videos &amp; All</span>
+    </button>
+    <button class="opt" data-a="closeS" style="justify-content:center;color:var(--mu)">Cancel</button>
+  `);
+}
+
+/* ---------- File Processing (Preserves pristine high quality) ---------- */
+async function processFiles(files, isVideoType) {
+  if (!files.length) return;
+  closeS();
+
+  let bad = 0;
+  $('#pg').style.width = '15%';
+
+  for (let i = 0; i < files.length; i++) {
+    const f = files[i];
+    const isVid = isVideoType || f.type.startsWith('video');
+    let thumb = null;
+    if (isVid) {
+      thumb = await generateVideoThumbnail(f);
+    }
+
+    try {
+      await put('media', {
+        id: crypto.randomUUID(),
+        uid: me.id,
+        type: isVid ? 'video' : 'image',
+        blob: f, // pristine untouched high quality original file
+        thumb: thumb,
+        name: f.name,
+        size: f.size,
+        added: Date.now() + i,
+        likes: []
+      });
+    } catch(er) {
+      bad++;
+    }
+
+    $('#pg').style.width = Math.min(95, 15 + ((i + 1) / files.length) * 80) + '%';
+  }
+
+  $('#pg').style.width = '100%';
+  setTimeout(() => $('#pg').style.width = '0', 350);
+
+  await reload();
+  view = { n: 'profile', uid: me.id, tab: isVideoType ? 'vid' : 'img' };
+  render();
+  toast(bad ? `${bad} file(s) failed` : `Uploaded successfully in high quality!`);
+}
+
+$('#fileImage').onchange = e => {
+  const fs = [...e.target.files];
+  e.target.value = '';
+  processFiles(fs, false);
+};
+
+$('#fileVideo').onchange = e => {
+  const fs = [...e.target.files];
+  e.target.value = '';
+  processFiles(fs, true);
+};
+
+/* ---------- User Interactions & Global Click Dispatch ---------- */
+document.addEventListener('click', async e => {
+  if (!e.target.closest('.top-search-wrap')) {
+    const drop = $('#topSearchDrop');
+    if (drop) drop.classList.add('hide');
+  }
+
+  const t = e.target.closest('[data-a]');
+  if (!t) return;
+  const a = t.dataset.a;
+
+  if (a === 'eye') {
+    const p = $('#apw');
+    const isP = p.type === 'password';
+    p.type = isP ? 'text' : 'password';
+    t.textContent = isP ? 'Hide' : 'Show';
+  } else if (a === 'mode') {
+    setMode(mode === 'signup' ? 'login' : 'signup');
+  } else if (a === 'tabLogin') {
+    setMode('login');
+  } else if (a === 'tabSignup') {
+    setMode('signup');
+  } else if (a === 'browseGuest') {
+    route();
+  } else if (a === 'loginModal') {
+    showAuth('login');
+  } else if (a === 'signupModal') {
+    showAuth('signup');
+  } else if (a === 'clearHeaderSearch') {
+    view.headerSearchQuery = '';
+    const inp = $('#topSearchInp');
+    if (inp) inp.value = '';
+    const drop = $('#topSearchDrop');
+    if (drop) drop.classList.add('hide');
+  } else if (a === 'theme') {
+    const d = document.documentElement;
+    const n = d.dataset.theme === 'dark' ? 'light' : 'dark';
+    d.dataset.theme = n;
+    localStorage.setItem('mm_theme', n);
+    if ($('.sh')) closeS();
+  } else if (a === 'go') {
+    if (t.dataset.n === 'me') {
+      if (!me) return showAuth('login');
+      view = { n: 'profile', uid: me.id };
+    } else {
+      view = { n: t.dataset.n };
+    }
+    render();
+  } else if (a === 'plus') {
+    if (!me) {
+      sheet(`
+        <div class="hd"></div>
+        <h3>Post to Moments</h3>
+        <p style="text-align:center;color:var(--mu);font-size:13.5px;margin-bottom:6px">Log in or create an account to share photos and videos in high quality.</p>
+        <button class="btn" data-a="signupModal" style="margin-top:4px">Create Account</button>
+        <button class="btn alt" data-a="loginModal">Log In</button>
+        <button class="opt" data-a="closeS" style="justify-content:center;color:var(--mu);border:0">Cancel</button>
+      `);
+      return;
+    }
+    promptUploadChoice();
+  } else if (a === 'triggerUploadImage') {
+    $('#fileImage').click();
+  } else if (a === 'triggerUploadVideo') {
+    $('#fileVideo').click();
+  } else if (a === 'user') {
+    view = { n: 'profile', uid: t.dataset.uid };
+    render();
+  } else if (a === 'tab') {
+    view.tab = t.dataset.t;
+    view.keep = 1;
+    render();
+  } else if (a === 'open') {
+    openV(media.find(m => m.id === t.dataset.id));
+  } else if (a === 'closeV') {
+    $('#layer').innerHTML = '';
+  } else if (a === 'like') {
+    if (!me) {
+      sheet(`
+        <div class="hd"></div>
+        <h3>Join Moments</h3>
+        <p style="text-align:center;color:var(--mu);font-size:13.5px;margin-bottom:6px">Log in or create an account to like posts and interact.</p>
+        <button class="btn" data-a="loginModal" style="margin-top:4px">Log In</button>
+        <button class="btn alt" data-a="signupModal">Create Account</button>
+        <button class="opt" data-a="closeS" style="justify-content:center;color:var(--mu);border:0">Cancel</button>
+      `);
+      return;
+    }
+    const m = media.find(x => x.id === t.dataset.id);
+    if (!m) return;
+    m.likes = m.likes || [];
+    const i = m.likes.indexOf(me.id);
+    if (i < 0) m.likes.push(me.id);
+    else m.likes.splice(i, 1);
+    await put('media', m);
+    const y = $('#main').scrollTop;
+    render();
+    $('#main').scrollTop = y;
+  } else if (a === 'del') {
+    if (!cur || !me || cur.uid !== me.id) return;
+    sheet(`
+      <div class="hd"></div>
+      <h3>Delete Post?</h3>
+      <p style="text-align:center;color:var(--mu);font-size:13.5px;margin-bottom:6px">Are you sure you want to permanently delete this post? This cannot be undone.</p>
+      <button class="opt red" data-a="confirmDel" style="justify-content:center;text-align:center">Delete</button>
+      <button class="opt" data-a="closeS" style="justify-content:center;text-align:center">Cancel</button>
+    `);
+  } else if (a === 'confirmDel') {
+    if (cur && me && cur.uid === me.id) {
+      await pr(st('media', 'readwrite').delete(cur.id));
+      await reload();
+      closeS();
+      $('#layer').innerHTML = '';
+      render();
+      toast('Post deleted');
+    }
+  } else if (a === 'closeS') {
+    if (e.target === t || t.dataset.a === 'closeS') closeS();
+  } else if (a === 'settings') {
+    sheet(`
+      <div class="hd"></div>
+      <h3>Account Settings</h3>
+      <button class="opt" data-a="theme">
+        <span>Switch Theme</span>
+        <span style="color:var(--mu);font-size:13px">${document.documentElement.dataset.theme === 'dark' ? 'Dark' : 'Light'}</span>
+      </button>
+      <button class="opt red" data-a="logout">Log Out (@${esc(me.username)})</button>
+    `);
+  } else if (a === 'logout') {
+    localStorage.removeItem('mm_session');
+    me = null;
+    closeS();
+    view = { n: 'feed' };
+    route();
+    toast('Logged out');
+  } else if (a === 'edit') {
+    if (!me) return showAuth('login');
+    sheet(`
+      <div class="hd"></div>
+      <h3>Edit Profile</h3>
+      <div style="display:flex;flex-direction:column;align-items:center;gap:10px;margin-bottom:6px">
+        <div id="eavPreview" style="width:68px;height:68px;border-radius:50%;overflow:hidden;background:var(--blank-avatar);display:grid;place-items:center">
+          ${me.avatar ? `<img src="${U(me.avatar)}" style="width:100%;height:100%;object-fit:cover" alt="">` : BLANK_SVG}
+        </div>
+        <label class="btn alt" style="text-align:center;cursor:pointer;font-size:13px">
+          Upload photo
+          <input type="file" id="eav" accept="image/*" hidden>
+        </label>
+      </div>
+      <input class="fi" id="en" value="${esc(me.name)}" placeholder="Name" maxlength="40">
+      <textarea class="fi" id="eb" rows="3" placeholder="Bio" maxlength="150">${esc(me.bio)}</textarea>
+      <button class="btn" data-a="saveP">Save</button>
+    `);
+
+    const fileInp = $('#eav');
+    if (fileInp) {
+      fileInp.onchange = ev => {
+        const file = ev.target.files[0];
+        if (file) {
+          const previewUrl = URL.createObjectURL(file);
+          $('#eavPreview').innerHTML = `<img src="${previewUrl}" style="width:100%;height:100%;object-fit:cover" alt="">`;
+        }
+      };
+    }
+  } else if (a === 'saveP') {
+    if (!me) return;
+    me.name = $('#en').value.trim() || me.username;
+    me.bio = $('#eb').value.trim();
+    const f = $('#eav').files[0];
+    if (f) me.avatar = f;
+
+    await put('users', me);
+    await reload();
+    me = user(me.id);
+    closeS();
+    render();
+    toast('Profile updated');
+  }
 });
-function closeViewer(){document.getElementById('viewer').classList.remove('show');document.getElementById('viewerStage').innerHTML=''}
-document.querySelectorAll('.grid-item').forEach(x=>x.onclick=()=>{const img=x.querySelector('img');document.getElementById('viewerStage').innerHTML='<img src="'+img.src+'">';document.getElementById('viewer').classList.add('show')});
+
+document.addEventListener('keydown', e => {
+  if (e.key === 'Escape') $('#layer').innerHTML = '';
+});
+
+init();
 </script>
 </body>
 </html>
